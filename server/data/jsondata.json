@@ -1,0 +1,78 @@
+[
+    {
+        "info": {
+            "nom_Projet": "ATOUI FARES",
+            "libel": "chouchou",
+            "chef_projet_tech": "",
+            "chef_projet_fonctionnel": "",
+            "email": "faress.atoui@gmail.com",
+            "jour_homme_conception": 0,
+            "jour_homme_developpement": 0,
+            "jour_homme_integration": 0,
+            "jour_homme_recette": 0,
+            "jour_homme_total": 0
+        },
+        "dates": {
+            "date_incubation": "",
+            "date_integration": "",
+            "date_mep": "",
+            "echeances": []
+        },
+        "bascule_validation": {
+            "besoin_bascule": false,
+            "besoin_validation": false
+        },
+        "dependance_adherence": {
+            "technique": [
+                {
+                    "name": "PRODOCS",
+                    "domaine": "Editique"
+                },
+                {
+                    "name": "CESU",
+                    "domaine": "CESU/PAJE"
+                }
+            ]
+        },
+        "v2": {
+            "v2": false,
+            "code_organisation": [],
+            "justificaiton": "",
+            "contenuer_v2": false,
+            "batch_v2": false,
+            "transaction": false,
+            "web_service": false
+        },
+        "vm": {
+            "vm": false,
+            "nombre_vm": 0,
+            "logicel_vm": ""
+        },
+        "acces": {
+            "acces": []
+        },
+        "test": {
+            "nom_moa": "ATOUI FARES",
+            "nom_moe": "ATOUI FARES",
+            "nom_mue": "ATOUI FARES",
+            "support_sdit": "ATOUI FARES",
+            "demo_presentation": false,
+            "date_demo": ""
+        },
+        "portail": {
+            "pora": false,
+            "harmony_rcp": false,
+            "harmony_web": false,
+            "urssaf_fr": false
+        },
+        "autres": {
+            "accrochage_avec_partenaire": false,
+            "nouvelle_applciation_anais": false,
+            "application_anais": "",
+            "nouvelle_gris_de_droit": false,
+            "application_gris_droit": "",
+            "flux_entrant_sortant": false,
+            "commentaire_flux": ""
+        }
+    }
+]
