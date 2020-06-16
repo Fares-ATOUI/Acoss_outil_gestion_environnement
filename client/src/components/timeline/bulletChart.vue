@@ -26,7 +26,6 @@
       <CCollapse :show="details.includes(index)">
         <CCardBody>
           <CMedia :aside-image-props="{ height: 102 }">
-            {{values}}
             <v-checkbox v-model="item.checkbox" :key="index" :label="`Adhérence`"></v-checkbox>
 
             <div v-if="item.checkbox">
@@ -35,9 +34,9 @@
                 <span>
                   <Date
                     class="dateeee"
-                    :dates="item.dateDeb"
+                    :dates.sync="item.dateDeb"
                     :key="index"
-                    v-on:childToParent="onChildDate"
+
                   />
                 </span>
               </p>
@@ -46,9 +45,8 @@
                 <span>
                   <Date
                     class="dateeee"
-                    :dates="item.date"
+                    :dates.sync="item.date"
                     :key="index"
-                    v-on:childToParent="onChildDateFin"
                   />
                 </span>
               </p>
@@ -87,8 +85,7 @@ export default {
       items: [],
       fields,
       details: []
-      // dateFin:"",
-      // dateRow:""
+
     };
   },
 

@@ -14,6 +14,7 @@
     >
       <span slot="noResult">Oops! Aucun élément trouvé. Pensez à modifier la requête de recherche.</span>
     </multiselect>
+    {{valueTab}}
     <apexchart
       type="rangeBar"
       v-if="valueTab.length"
@@ -230,14 +231,15 @@ export default {
         }
       ],*/
       options: [],
-      valueTab: []
+      valueTab: [],
+      aux: []
     };
   },
 
   mounted: function() {
     fetch("http://localhost:3000/options").then(rep => {
       rep.json().then(value => {
-        console.log("options : ", value);
+        //console.log("options : ", value);
         this.options = value;
       });
     });
@@ -245,26 +247,28 @@ export default {
 
   methods: {
     async sendData(valueTab) {
-      if(valueTab. length > 0){
-      console.log("name sent", valueTab[valueTab.length - 1].name);
+      if (valueTab.length >= 0) {
+        let valueTableau = "";
+        let sep = ",";
+        for (let i = 0; i < valueTab.length; i++) {
+          if (i > 0) {
+            valueTableau += sep + valueTab[i].name;
+          } else {
+            valueTableau += valueTab[i].name;
+          }
+        }
+        console.log(valueTableau);
 
-      const response = await fetch(
-        "http://localhost:3000/timeline3/" + valueTab[valueTab.length - 1].name
-      );
-    
-      const jsonResponse = await response.json();
+        const response = await fetch(
+          "http://localhost:3000/timeline3/" + valueTableau
+        );
 
-     
-      jsonResponse.map(item => {
-        console.log( item);
-      
-      
-      if (jsonResponse.length > 0) {
-        this.series.push(item);
-      }
-    
-      });
+        const jsonResponse = await response.json();
 
+        console.log("json", jsonResponse);
+
+        this.series = [];
+        this.series = jsonResponse;
       }
     }
   }

@@ -64,3 +64,24 @@ exports.list_options = function (req, res) {
         res.send(options)
     })
 };
+
+exports.list_projets_incubation = function (req, res) {
+
+    db.getListProjetsIncubation( function (listeProjets) {
+        res.send(listeProjets)
+    })
+};
+
+exports.list_projets_incubation_details = function (req, res) {
+
+    db.getListProjetsIncubationDetails(req.params.id, function (listeDetails) {
+        res.send(listeDetails)
+    })
+};
+
+exports.list_projets_incubation_prevision = function (req, res) {
+
+    db.getListProjetsIncubationPrevision(function (listePrevision) {
+        res.send(listePrevision)
+    })
+};

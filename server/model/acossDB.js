@@ -43,10 +43,10 @@ exports.insertForm = function (data) {
     let jh_recette = data[0].info.jour_homme_recette
     let jh_total = data[0].info.jour_homme_total
 
-    let date_entree_incubation = data[0].dates.date_incubation ? data[0].dates.date_incubation : ""
-    let date_entree_integration = data[0].dates.date_integration ? data[0].dates.date_integration : ""
-    let date_mep = data[0].dates.date_mep ? data[0].dates.date_mep : ""
-    let echance = data[0].dates.echeances ? data[0].dates.echeances : ""
+    let date_entree_incubation = data[0].dates.date_incubation ? data[0].dates.date_incubation : null
+    let date_entree_integration = data[0].dates.date_integration ? data[0].dates.date_integration : null
+    let date_mep = data[0].dates.date_mep ? data[0].dates.date_mep : null
+    let echance = data[0].dates.echeances ? data[0].dates.echeances : null
 
     let besoin_bascule = data[0].bascule_validation.besoin_bascule
     let besoin_validation = data[0].bascule_validation.besoin_validation
@@ -68,7 +68,7 @@ exports.insertForm = function (data) {
     let nom_moe = data[0].test.nom_moe
     let nom_mue = data[0].test.nom_mue
     let support_sdit = data[0].test.support_sdit
-    let demo_presentation = data[0].test.demo_presentation 
+    let demo_presentation = data[0].test.demo_presentation
     let date_demo = data[0].test.date_demo ? data[0].test.date_demo : null
 
     let besoin_vm = data[0].vm.vm
@@ -96,10 +96,10 @@ exports.insertForm = function (data) {
     let dateInsertion = moment().format('L')
 
 
-    
+
     console.log("here : ", heureInsertion)
     console.log("date ", dt.date_format(dateInsertion))
-    
+
 
     const text3 = 'INSERT INTO projet(code_projet, date_insertion, heure_insertion) VALUES($1, $2, $3) RETURNING *'
     const values3 = [nom_projet, dateInsertion, heureInsertion]
@@ -117,7 +117,7 @@ exports.insertForm = function (data) {
                 .query(`select * from application`)
                 .then(res => {
                     let resu = res.rows
-              
+
                     resu.forEach(element => {
                         dataTech.forEach(el => {
                             let nom_app = el.name
@@ -134,7 +134,7 @@ exports.insertForm = function (data) {
                             if (nom_app == element.nom_app) {
                                 console.log("ok insertion application acoss db : ")
                                 const text4 = "INSERT INTO application_form(nom_app, domaine, type_app, id_responsable, description, id_app_param, id_projet, adherence, commentaire_app, date_fin, date_deb) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *"
-                                const values4 = [nom_app, domaine, type_app, id_resp, description, id_app_param, idprojet, adherence, commentaire_app,dateFinApp, dateDebApp]
+                                const values4 = [nom_app, domaine, type_app, id_resp, description, id_app_param, idprojet, adherence, commentaire_app, dateFinApp, dateDebApp]
 
                                 client
                                     .query(text4, values4)
@@ -186,8 +186,9 @@ exports.getListHistorique = function (callback) {
 
 exports.getListHistoriqueDetails = function (id, callback2) {
 
-    client.query("select distinct p.id_projet, date_mep,  code_projet, libelle,cp_technique, email, jh_concept, jh_integration, jh_dev, jh_recette, jh_total, date_livraison, date_integration,   echeance, cp_fonctionnel, besoin_bascule, besoin_validation, nom_app, domaine, id_app_param,  besoin_vm, combien_vm, logiciel, acces, test_nom_moa, test_nom_moe, test_nom_mue, test_responsable_sdit, besoin_demo_presentation, date_demo, portail_pora, portail_harmony_web, portail_harmony_rcp, portail_urssaf, accrochage_partenaire, nouvelle_application_anais, nom_applicaiton_anais, nouvelle_gris_droit, nom_application_gris, jeux_de_donnes, commentaire, v2, conteneur_v2, transaction, batch_v2, web_service, code_organisation, justification_code_org, adherence, commentaire_app from projet_lot p left join application_form a on (p.id_projet = a.id_projet) left join donnes_techniques d on (p.id_projet= d.id_projet) where p.id_projet = '" + id + "'")
+    client.query("select distinct p.id_projet, p.date_mep, p.code_projet, p.libelle, p.cp_technique, p.email, p.jh_concept,p.jh_integration, p.jh_dev, p.jh_recette, p.jh_total, p.date_livraison, p.date_integration,p.echeance, p.cp_fonctionnel, p.besoin_bascule, p.besoin_validation, a.nom_app, a.domaine, a.id_app_param, a.date_deb, a.date_fin, a.commentaire_app, a.adherence, d.besoin_vm, d.combien_vm, d.logiciel, d.acces, d.test_nom_moa, d.test_nom_moe,d.test_nom_mue, d.test_responsable_sdit, d.besoin_demo_presentation, d.date_demo, d.portail_pora,d.portail_harmony_web, d.portail_harmony_rcp, d.portail_urssaf, d.accrochage_partenaire, d.nouvelle_application_anais, d.nom_applicaiton_anais, d.nouvelle_gris_droit, d.nom_application_gris, d.jeux_de_donnes, d.commentaire,d.v2, d.conteneur_v2, d.transaction, d.batch_v2, d.web_service, d.code_organisation, d.justification_code_org  from projet_lot p left join application_form a on (p.id_projet = a.id_projet) left join donnes_techniques d on (p.id_projet= d.id_projet) where p.id_projet = '" + id + "'")
         .then(results => {
+            console.log("details historique : ", results.rows)
             callback2(results.rows)
         })
 
@@ -199,6 +200,10 @@ exports.deleteListHistoriqueDetails = function (id) {
     client.query("delete from projet_lot pl  where pl.id_projet = '" + id + "'")
         .then(() => {
             client.query("delete from projet p  where p.id_projet = '" + id + "'")
+        }).then(() => {
+            "delete from application_form a where a.id_projet = '" + id + "'"
+        }).then(() => {
+            "delete from donnes_techniques d where d.id_projet = '" + id + "'"
         })
     console.log("deleted: ")
     return JSON.stringify("200")
@@ -247,12 +252,12 @@ exports.getTimeline2 = function (callback4) {
                 let data = [];
 
                 hashMap.get(key).forEach((element) => {
-                    
+
                     let date_db_incub_ = dt.date_format(element.date_livraison)
                     let date_fn_incub_ = dt.date_format(element.date_integration)
 
                     data.push({
-                        x: element.nom_app ,
+                        x: element.nom_app,
                         y: [
                             new Date(date_db_incub_).getTime(),
                             new Date(date_fn_incub_).getTime()
@@ -338,17 +343,17 @@ exports.updateForm = function (data, id) {
 
     client.query("delete from projet_lot pl  where pl.id_projet = '" + id + "'")
         .then(() => {
-            client.query("delete from projet p  where p.id_projet = '" + id + "'")
-        }).then(() =>{
             client.query("delete from application_form a   where a.id_projet = '" + id + "'")
-        }).then(()=>{
+        }).then(() => {
             client.query("delete from donnes_techniques d  where d.id_projet = '" + id + "'")
             console.log("suppression   ")
-        }).then(()=>{
+        }).then(() => {
+            client.query("delete from projet p  where p.id_projet = '" + id + "'")
+        }).then(() => {
             this.insertForm(data)
             console.log('insertion de nouveau ')
         })
- 
+
 
 
     // var query = "UPDATE projet SET code_projet = ($1), date_insertion = ($2), heure_insertion = ($3) WHERE id_projet=($4)";
@@ -376,7 +381,7 @@ exports.updateForm = function (data, id) {
     //             })
     //         })
     //         console.log(dateInsert)*/
-            
+
     //         dataTech.forEach(el => {
     //             //var BreakException = {};
     //           //  try {
@@ -385,8 +390,8 @@ exports.updateForm = function (data, id) {
 
     //                 let nom_app = el.name
     //                 let domaine = el.domaine
-                    
-                    
+
+
 
     //                 if (element.id_projet == id && element.nom_app.includes(nom_app)) {
     //                     console.log(nom_app, " Auncun Changement même id_projet et même application ==> Mise a jour")
@@ -399,15 +404,15 @@ exports.updateForm = function (data, id) {
     //                     //throw BreakException;
     //                 }
 
-                    
-     
+
+
     //             })
     //            /* } catch (e) {
     //                 if (e !== BreakException) throw e;
     //             }*/
     //         })
 
-    
+
     //             console.log("insery ", dateInsert)
 
     //         if (dateInsert.length > 0) {
@@ -455,8 +460,8 @@ exports.updateForm = function (data, id) {
     //                 });
     //         }
     //         else {
-            
-         
+
+
     //             var query = "UPDATE projet_lot SET code_projet = ($1), libelle = ($2), cp_technique = ($3), email = ($4), jh_concept = ($5), jh_integration = ($6),  jh_dev = ($7), jh_recette = ($8), jh_total = ($9), date_livraison = ($10), date_integration = ($11), date_mep = ($12), echeance = ($13), cp_fonctionnel = ($14), besoin_bascule = ($15), besoin_validation = ($16) WHERE id_projet=($17)";
 
     //             client.query(query, [nom_projet, libelle, cp_technique, email, jh_conception, jh_integration, jh_developpement, jh_recette, jh_total, date_entree_incubation, date_entree_integration, date_mep, echance, cp_fonct, besoin_bascule, besoin_validation, id], function (err, result) {
@@ -466,10 +471,10 @@ exports.updateForm = function (data, id) {
     //             })
     //         }
 
-        
+
 
     //         var query = "UPDATE donnes_techniques SET besoin_vm = ($1), combien_vm = ($2), logiciel = ($3), acces = ($4), test_nom_moa = ($5), test_nom_moe = ($6),  test_nom_mue = ($7), test_responsable_sdit = ($8), besoin_demo_presentation = ($9), date_demo = ($10), portail_pora = ($11), portail_harmony_web = ($12), portail_harmony_rcp = ($13), portail_urssaf = ($14), accrochage_partenaire = ($15), nouvelle_application_anais = ($16), nom_applicaiton_anais = ($17), nouvelle_gris_droit = ($18),nom_application_gris = ($19), jeux_de_donnes = ($20), commentaire = ($21), v2 = ($22), conteneur_v2 = ($23), transaction = ($24), batch_v2 = ($25), web_service = ($26), code_organisation = ($27), justification_code_org = ($28) WHERE id_projet=($29)";
-     
+
 
     //         client.query(query, [besoin_vm, combien_vm, logiciel_vm, acces, nom_moa, nom_moe, nom_mue, support_sdit, demo_presentation, date_demo, pora, harmony_web, harmony_rcp, urssaf_fr, accrochage_avec_partenaire, nouvelle_application_anais, nom_application_anais, nouvelle_gris_de_droit, application_gris_droit, flux_entrant_sortant, commentaire_flux, v2, conteneur_v2, transaction, batch_v2, web_service, code_organisation, justificaiton, id], function (err, result) {
     //             if (err) { return console.error(err); }
@@ -489,51 +494,73 @@ exports.getListProjetMmMep = function (callback5) {
                               where P1.id_projet != P2.id_projet
                               and P1.date_mep = P2.date_mep  `)
         .then(results => {
-           callback5(results.rows)
+            callback5(results.rows)
         })
 };
 
-exports.getTimeline3 = function (name,callback6) {
+exports.getTimeline3 = function (name, callback6) {
+
     RestTimeline3 = [];
-    if(name){
-    console.log("name db ", name)
-    client.query("select DISTINCT P2.id_projet , a.nom_app, P2.code_projet, P2.date_livraison, P2.date_integration from projet_lot P2 left join application_form a on (p2.id_projet = a.id_projet )  where a.nom_app = '" + name + "'")
-        .then(timeline => {
-            let data = timeline.rows;
-            var nameHashMap = gb.groupBy(data, el => el.code_projet);
+    if (name) {
+        let names = name.split(',')
+        //console.log("name db ", names)
+        //let debut = "("
+        let sep = ",";
+        let debut = "("
+        for (let i = 0; i < names.length; i++) {
+            if (i > 0) {
+                debut += sep + "'" + names[i] + "'"
+            } else {
+                debut += "'" + names[i] + "'"
+            }
+        }
+        debut += ")"
+        console.log(debut)
 
-            
-            new Map(nameHashMap).forEach((el, key, hashMap) => {
-                let data = [];
+        // name.forEach(element => {
+        client.query("select DISTINCT P2.id_projet , a.nom_app, P2.code_projet, a.date_deb, a.date_fin from projet_lot P2 left join application_form a on (p2.id_projet = a.id_projet )  where a.date_deb != a.date_fin and  a.nom_app IN " + debut + " ")
+            .then(timeline => {
+                //console.log(timeline.rows)
+                let data = timeline.rows;
+                var nameHashMap = gb.groupBy(data, el => el.code_projet);
 
-                hashMap.get(key).forEach((element) => {
 
-                    let date_db_incub_ = dt.date_format(element.date_livraison)
-                    let date_fn_incub_ = dt.date_format(element.date_integration)
+                new Map(nameHashMap).forEach((el, key, hashMap) => {
+                    let data = [];
 
-                    data.push({
-                        x: element.nom_app,
-                        y: [
-                            new Date(date_db_incub_).getTime(),
-                            new Date(date_fn_incub_).getTime()
-                        ]
-                    })
-                });
+                    hashMap.get(key).forEach((element) => {
 
-                RestTimeline3.push({
-                    name: hashMap.get(key)[0].code_projet,
-                    data: data
-                });
-            })
-            callback6(RestTimeline3)
-            console.log('%o', RestTimeline3)
-        })
+                        let date_db_incub_ = dt.date_format(element.date_deb)
+                        let date_fn_incub_ = dt.date_format(element.date_fin)
+
+                        data.push({
+                            x: element.nom_app,
+                            y: [
+                                new Date(date_db_incub_).getTime(),
+                                new Date(date_fn_incub_).getTime()
+                            ]
+                        })
+                    });
+
+                    RestTimeline3.push({
+                        name: hashMap.get(key)[0].code_projet,
+                        data: data
+                    });
+                })
+                console.log('%o',RestTimeline3)
+                callback6(RestTimeline3)
+
+            });
+
+
+
+
     }
-    else(callback5(RestTimeline3))
+    else (callback6(RestTimeline3))
 };
 
 exports.getOptions = function (callback7) {
-   
+
     client.query("select distinct nom_app, domaine from application_form")
         .then(timeline => {
             let data = timeline.rows;
@@ -560,10 +587,38 @@ exports.getOptions = function (callback7) {
                 });
             })
             callback7(RestTimeline4)
-            //console.log('%o', RestTimeline4)
         })
-}
+};
 
+exports.getListProjetsIncubation = function (callback8) {
+
+    client.query("select distinct  p.id_projet ,p.date_mep, p.code_projet, p.libelle,  p.date_livraison, p.date_integration, count(id_app) as nbr_app from projet_lot p group by p.id_projet, p.date_mep, p.code_projet, p.libelle,  p.date_livraison, p.date_integration ")
+        .then(results => {
+            callback8(results.rows)
+        })
+
+
+};
+
+exports.getListProjetsIncubationDetails = function (id, callback9) {
+
+    client.query("select distinct p.id_projet, p.date_mep, p.code_projet, p.libelle, p.cp_technique, p.email, p.jh_concept,p.jh_integration, p.jh_dev, p.jh_recette, p.jh_total, p.date_livraison, p.date_integration, p.echeance, p.cp_fonctionnel, p.besoin_bascule, p.besoin_validation, a.nom_app, a.domaine, a.id_app_param, a.date_deb, a.date_fin, a.commentaire_app, a.adherence from projet_lot p left join application_form a on (p.id_projet = a.id_projet) where p.id_projet = '" + id + "'")
+        .then(results => {
+            callback9(results.rows)
+        })
+
+
+};
+
+exports.getListProjetsIncubationPrevision = function (callback10) {
+
+    client.query("select distinct date_diff('day'::character varying, now()::date::timestamp without time zone, p.date_livraison::timestamp without time zone) as diff, code_projet, date_livraison, p.date_integration, p.date_mep from projet_lot p group by code_projet, p.date_livraison, p.date_integration, p.date_mep")
+        .then(results => {
+            callback10(results.rows)
+        })
+
+
+};
 
 
 

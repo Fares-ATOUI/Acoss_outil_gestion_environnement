@@ -3,6 +3,15 @@
 
   <h1 ><strong>Formulaire de demande de création</strong></h1>
 <!-------------------------------------------------INFO ACTEURS---------------------------------------------------->
+<p v-if="errors.length">
+    <b>Please correct the following error(s):</b>
+    <!-- {{showAlert(toString(errors))}} -->
+     <ul>
+      <li v-for="error in errors" v-bind:key="error">{{error}}</li>
+    </ul>
+  </p>
+    
+  
 <v-card >
   <v-row>
     <v-card-title v-on:click="isHidden = !isHidden">Information Acteurs Projets</v-card-title>
@@ -41,6 +50,7 @@
     <v-text-field
       v-model="libelle"
       :rules="nameRules"
+       name = "libelle"
       label="Libelle"
       required
       solo
@@ -751,7 +761,7 @@
  </div>
     </v-card>
 
-      <v-btn large color="success" dark @click="sendData" >Valider</v-btn>
+      <v-btn class="mr-4" large color="success" dark @click="sendData" >Valider</v-btn>
 
   </v-card>
  </v-container>
@@ -777,7 +787,7 @@ Vue.prototype.$event = new Vue()
   },
     data: () => ({
       isUpdate: false,
-
+      errors:[],
       valueApp: [],
       valueee: null,
       valueAppTab: [],
@@ -830,6 +840,7 @@ Vue.prototype.$event = new Vue()
         v => (v && v.length <= 50) || 'champ doit etre inferieur a 50 caract',
       ],
       email: '',
+
       emailRules: [
         v => !!v || 'veillez remplir votre email',
         v => /.+@.+\..+/.test(v) || 'E-mail doit etre valide',
@@ -855,6 +866,9 @@ Vue.prototype.$event = new Vue()
         'Base'
       ],
       label:"veuillez selectionner les accés ",
+      valid: true,
+      lazy : false,
+
 
       itemsDependance:  [
           
@@ -1162,14 +1176,11 @@ Vue.prototype.$event = new Vue()
 
      this.$event.$on('child', (data) => {
         this.valueDateFin.push(data)
-        console.log("child ",this.valueDateFin)
-        console.log("valueTab ", this.valueTab)
+        console.log("child merge",this.valueDateFin)
+        console.log("valueTab merge ", this.valueTab)
         this.mergeApp(this.valueDateFin)
         
       })
-
-
-
        //console.log('route', this.$route.params);
        let id = this.$route.params.id
        
@@ -1183,6 +1194,19 @@ Vue.prototype.$event = new Vue()
 
 
     methods: {
+      showAlert(message) {
+      // Use sweetalert2
+      //this.$swal(message);
+      if(message){
+      this.$swal("Good job!", message, "success")
+      }else{
+        this.$swal("Good job!", "You are ready to start!", "success")
+      }
+      },
+
+    say: function (message) {
+      alert(message)
+    },
       mergeApp(valueAppMerge){
 
          let datamerge = []
@@ -1205,7 +1229,6 @@ Vue.prototype.$event = new Vue()
        
 
       },
-
 
       validate () {
         this.$refs.form.validate()
@@ -1248,13 +1271,50 @@ Vue.prototype.$event = new Vue()
       this.dateDemo = value;
     },
 
+    validForm:function() {
+    this.errors = [];
+    
+      if(!this.NomProjet) {
+        this.errors.push("Nom de projet requi.");
+      } /*else if(!/^hello/.test(this.libelle)) {
+        this.errors.push("Valid libelle required.");   0681425098     
+      }*/
+      else if(!this.NomProjet.length) {
+        this.errors.push("Nom de projet requi.");        
+      }
 
-async sendData()
- {
-   
-  console.log("valuesTab", this.valueTab)
+      if(!this.valueTab) {
+        this.errors.push("application requise.");
+      } else if(!this.valueTab.length) {
+        this.errors.push("application requise.");        
+      }
 
-     let  info_Acteur_Projet = 
+      if(!this.dateChamps) {
+        this.errors.push("date entrée en incubation requise.");
+      } else if (!this.dateChamps.length) {
+        this.errors.push("date entrée en incubation requise.");        
+      }
+       if(!this.dateIntegration) {
+        this.errors.push("date entrée en Intégration requise.");
+      } else if (!this.dateIntegration.length) {
+        this.errors.push("date entrée en Intégration requise.");        
+      }
+          if(!this.dateTrain) {
+        this.errors.push("date MEP requise.");
+      } else if (!this.dateTrain.length) {
+        this.errors.push("date  MEP requise.");        
+      }
+      return this.errors.length;
+    },
+
+
+
+
+  async sendData()
+  {
+  if (this.validForm()) return;
+
+       let  info_Acteur_Projet = 
 
         [
           { 
@@ -1376,64 +1436,14 @@ async sendData()
       const jsonResponse = await response.json()
       console.log(jsonResponse)
 
-      this.NomProjet = ""
-      this.libelle = ""
-      this.CpTechnique = ""
-      this.CpFonctionnel  = ""
-      this.email = ""
-      this.JHConception = 0
-      this.JHDev = 0
-      this.JHIntegration = 0
-      this.JHR7 = 0
-      this.TotalJH = 0
 
-      this.dateChamps = ""
-      this.dateIntegration = ""
-      this.dateTrain = ""
-      this.selectedItems = []
-
-      this.checkbox1 = false
-      this.checkbox2 = false
-
-      this.checkbox10 = false
-      this.checkbox11 = false
-      this.checkbox12 = false
-      this.checkbox13 = false
-
-      this.checkbox3 = false
-      this.code_organisation = []
-      this.justification = ""
-      this.checkbox5 = false
-      this.checkbox6 = false
-      this.checkbox7 = false
-      this.checkbox8 = false
-
-      this.checkbox4 = false
-      this.combien = 0
-      this.logicel = ""
-
-      this.valueAcces = []
-
-      this.moa = ""
-      this.moe = ""
-      this.mue = ""
-      this.supportSDIT = ""
-      this.checkbox9 = false
-      this.dateDemo = ""
-
-      this.checkbox14 = false
-      this.checkbox15 = false
-      this.nomApplcationAnais = ""
-      this.checkbox16 = false
-      this.grisDeDroit = ""
-      this.checkbox17 = false
-      this.commentaire = ""
-
-      this.valueTab = []
-
-
+this.resetFields()
 
   },
+
+   resetFields () {
+            Object.assign(this.$data, this.$options.data.call(this));
+        },
 
 async recupeData(id)
   {
@@ -1447,16 +1457,27 @@ async recupeData(id)
             let dataformat = moment(item.date_integration).format("YYYY-MM-DD");
             let dataformatmep = moment(item.date_mep).format("YYYY-MM-DD");
             let data_format_livraison = moment(item.date_livraison).format("YYYY-MM-DD");
-            let data_format_demo = moment(item.date_demo).format("YYYY-MM-DD");
-            let date_deb_app = moment(item.date_deb).format("YYYY-MM-DD");
-            let date_fin_app = moment(item.date_fin).format("YYYY-MM-DD");
             
+            
+            
+            if(item.date_demo){
+            let data_format_demo = moment(item.date_demo).format("YYYY-MM-DD");
+            item.date_demo = data_format_demo
+            }
+            
+            if(item.date_deb){
+              let date_deb_app = moment(item.date_deb).format("YYYY-MM-DD");
+              item.date_deb = date_deb_app
+            }
+            if(item.date_fin){
+              let date_fin_app = moment(item.date_fin).format("YYYY-MM-DD");
+              item.date_fin = date_fin_app
+            }
             item.date_integration = dataformat;
             item.date_mep = dataformatmep
             item.date_livraison = data_format_livraison;
-            item.date_demo = data_format_demo
-            item.date_deb = date_deb_app
-            item.date_fin = date_fin_app
+            
+            
            
 
             return item;
@@ -1486,6 +1507,7 @@ async recupeData(id)
 
       this.checkbox3 = jsonResponse[0].v2
       //code_org
+      if(jsonResponse[0].code_organisation){
       let y = jsonResponse[0].code_organisation.replace('{','')
       let x = y.replace('}', '')
       let n = x.replace(/"/g, '')
@@ -1496,7 +1518,7 @@ async recupeData(id)
       }else{
         this.code_organisation = n
       }
-      
+      }
       
       this.justification = jsonResponse[0].justification_code_org
       this.checkbox5 = jsonResponse[0].conteneur_v2
@@ -1509,6 +1531,7 @@ async recupeData(id)
       this.logicel = jsonResponse[0].logiciel
 
       //acces
+      if(jsonResponse[0].acces){
       let z = jsonResponse[0].acces.replace('{','')
       let a = z.replace('}', '')
       let b = a.replace(/"/g, '')
@@ -1521,7 +1544,7 @@ async recupeData(id)
       }else{
         this.valueAcces = b
       }
-
+      }
       this.moa = jsonResponse[0].test_nom_moa
       this.moe = jsonResponse[0].test_nom_moe
       this.mue = jsonResponse[0].test_nom_mue

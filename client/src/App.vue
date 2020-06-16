@@ -27,6 +27,29 @@
           <v-tab href="/timeline3">Timeline 3</v-tab>
           <v-tab href="/Historique">Historique</v-tab>
           <v-tab href="/admin">Admin</v-tab>
+          <v-menu offset-y>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+          color="primary"
+          dark
+          v-bind="attrs"
+          v-on="on"
+
+        >
+          Dropdown
+        </v-btn>
+      </template>
+      <v-list>
+        <v-list-item
+          v-for="(item, index) in items"
+          :key="index"
+          @click="click()"
+          href="/tableau"
+        >
+          <v-list-item-title>{{ item.title }}</v-list-item-title>
+        </v-list-item>
+      </v-list>
+    </v-menu>
         </v-tabs>
       </template>
       
@@ -68,7 +91,16 @@ export default {
   },
 
   data: () => ({
-    //
+   items: [
+        { title: 'Tableau 1' },
+        { title: 'Tableau 2' },
+      ],
   }),
+
+ methods: {
+   click(){
+     return console.log("hello ")
+   }
+ }
 };
 </script>

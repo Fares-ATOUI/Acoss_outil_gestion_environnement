@@ -33,5 +33,13 @@ module.exports = function (app) {
 
     app.route('/options')
         .get(restApi.list_options);
-    
+
+    app.route('/projet_en_incubation')
+        .get(restApi.list_projets_incubation);
+
+    app.route('/tableau/details/:id')
+        .get(restApi.list_projets_incubation_details); 
+
+    app.route('/projet_en_incubation_prevision')
+        .get(restApi.list_projets_incubation_prevision);
 };

@@ -26,7 +26,7 @@
         <v-date-picker v-model="date" no-title scrollable>
           <v-spacer></v-spacer>
           <v-btn text color="primary" @click="menu = false">Annuler</v-btn>
-          <v-btn text color="primary" @click=" $refs.menu.save(date), emitToParent()">Valider</v-btn>
+          <v-btn text color="primary" @click=" $refs.menu.save(date), emitToParent(), $emit('update:dates',date)">Valider</v-btn>
         </v-date-picker>
       </v-menu>
     </v-flex>

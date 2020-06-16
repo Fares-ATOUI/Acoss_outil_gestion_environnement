@@ -8,6 +8,7 @@ import Historique from '../components/historique/HistoriqueTable.vue'
 import Form from '../components/FormVue.vue'
 import Admin from '../components/admin/TB.vue'
 import test from '../components/timeline/Timeline3.vue'
+import tableau from '../components/tableau/tableau.vue'
 
 Vue.use(VueRouter)
 
@@ -19,7 +20,8 @@ const routes = [
   { path: '/Form', component: Form, name:'form'} ,
   { path: '/Historique', component: Historique, name:"historique"},
   { path: '/admin', component: Admin},
-  { path: '/timeline3', component: test }
+  { path: '/timeline3', component: test },
+  { path: '/tableau', component: tableau }
 ]
 
 const router = new VueRouter({
