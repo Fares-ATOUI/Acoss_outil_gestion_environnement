@@ -14,7 +14,6 @@
     >
       <span slot="noResult">Oops! Aucun élément trouvé. Pensez à modifier la requête de recherche.</span>
     </multiselect>
-    {{valueTab}}
     <apexchart
       type="rangeBar"
       v-if="valueTab.length"
@@ -39,7 +38,12 @@ export default {
       chartOptions: {
         chart: {
           height: 450,
-          type: "rangeBar"
+          type: "rangeBar",
+          events: {
+            mouseMove: function(event, chartContext, config) {
+              console.log("config", config)
+            }
+          }
         },
         plotOptions: {
           bar: {

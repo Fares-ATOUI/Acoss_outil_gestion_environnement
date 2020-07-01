@@ -42,4 +42,16 @@ module.exports = function (app) {
 
     app.route('/projet_en_incubation_prevision')
         .get(restApi.list_projets_incubation_prevision);
+        
+    app.route('/requete/:bio')
+        .get(restApi.list_requete);
+
+    app.route('/admin/requete')
+        .get(restApi.list_admin_requete);
+
+    app.route('/admin/requete/delete/:id')
+        .delete(restApi.delete_list_admin_requete);
+
+    app.route('/admin/details/:id')
+        .get(restApi.list_admin_details);
 };

@@ -55,17 +55,21 @@ const fields = [
 ];
 
 export default {
-  props: ["items"],
-  
 
-  computed: {
-    getItems() {
-      return this.items;
-    }
-  },
+
+mounted: function() {
+      fetch("http://localhost:3000/projet_mm_date_mep")
+        .then(rep => {
+          return rep.json();
+        })
+        .then(e => {
+          this.items = e;
+        });
+},
   name: "tables",
   data() {
     return {
+      items:[],
       fields,
       details: []
     };

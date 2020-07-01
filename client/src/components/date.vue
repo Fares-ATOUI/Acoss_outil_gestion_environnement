@@ -21,12 +21,13 @@
             readonly
             v-on="on"
             solo
+            :disabled="disabled"
           ></v-text-field>
         </template>
-        <v-date-picker v-model="date" no-title scrollable>
+        <v-date-picker v-model="date" no-title scrollable :min="min" >
           <v-spacer></v-spacer>
           <v-btn text color="primary" @click="menu = false">Annuler</v-btn>
-          <v-btn text color="primary" @click=" $refs.menu.save(date), emitToParent(), $emit('update:dates',date)">Valider</v-btn>
+          <v-btn text color="primary" @click=" $refs.menu.save(date), emitToParent(), $emit('update:dates',date), disableToParent()">Valider</v-btn>
         </v-date-picker>
       </v-menu>
     </v-flex>
@@ -35,7 +36,7 @@
 
 <script>
 export default {
-  props: ["dates"],
+  props: ["dates","min","disabled"],
   data: function() {
     //date: "",//new Date().toISOString().substr(0, 10),
     return {
@@ -47,6 +48,10 @@ export default {
     emitToParent() {
       let d = this.date;
       this.$emit("childToParent", d);
+    },
+    disableToParent() {
+      let x = false
+      this.$emit("disabledToparent", x);
     }
   }
 };

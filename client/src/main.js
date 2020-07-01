@@ -14,6 +14,11 @@ import VueSweetalert2 from 'vue-sweetalert2';
 
 // If you don't need the styles, do not connect
 import 'sweetalert2/dist/sweetalert2.min.css';
+import Bootstrap from 'bootstrap-vue'
+//import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+
+Vue.use(Bootstrap)
 
 const options = {
   confirmButtonColor: '#41b882',

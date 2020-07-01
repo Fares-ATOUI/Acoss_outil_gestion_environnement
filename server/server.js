@@ -38,6 +38,15 @@ app.put('/data', function (req, res) {
   });
 })
 
+app.post('/requete', function (req, res) {
+  console.log("server / ", req.body)
+  data = req.body
+  db.insertRequete(data)
+  res.json({
+    status: "success"
+  });
+})
+
 app.get('/test', function (req, res) {
   res.send(data);
 })

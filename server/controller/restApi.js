@@ -85,3 +85,30 @@ exports.list_projets_incubation_prevision = function (req, res) {
         res.send(listePrevision)
     })
 };
+
+exports.list_requete = function (req, res) {
+
+    db.getRequete(req.params.bio, function (listeReq) {
+        res.send(listeReq)
+    })
+};
+
+exports.list_admin_requete = function (req, res) {
+
+    db.getAdminRequete(function (listes) {
+        res.send(listes);
+    })
+};
+
+exports.delete_list_admin_requete = function (req, res) {
+    console.log("rest apo : ", req.params.id)
+    res.send(db.deleteListAdminRequete(req.params.id));
+};
+
+exports.list_admin_details = function (req, res) {
+
+    db.getListAdminDetails(req.params.id, function (list) {
+        res.send(list)
+    })
+};
+

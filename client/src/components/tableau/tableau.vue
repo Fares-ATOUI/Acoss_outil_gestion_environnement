@@ -43,10 +43,9 @@
                       class
                       @click="click(), tableauDetails(item.id_projet)"
                       
-                    >details</CButton>
+                    :key="index" >details</CButton>
                     <CButton size="sm" color="danger" class="ml-1">Supprimer</CButton>
                   </div>
-                
                   <TableauDetails v-if="isHidden" :items="itemsDetails" :key="index"/>
                 </CMedia>
               </CCardBody>
@@ -54,9 +53,7 @@
           </template>
         </CDataTable>
       </div>
-      <div class="col-sm">
-        <TablePrevision />
-      </div>
+
     </div>
   </div>
 </template>
@@ -65,7 +62,7 @@
 const fields = [
   { key: "code_projet", _style: "width:40%" },
   { key: "libelle", _style: "width:40%;" },
-  { key: "nbr_app", _style: "width:20%;" },
+  { key: "id_projet", _style: "width:20%;" },
   {
     key: "show_details",
     label: "",
@@ -76,12 +73,12 @@ const fields = [
 ];
 
 import TableauDetails from "./tableauDetails.vue";
-import TablePrevision from "./prevision";
+//import TablePrevision from "./prevision";
 var moment = require("moment");
 export default {
   components: {
     TableauDetails,
-    TablePrevision
+   // TablePrevision
   },
 
   name: "tables",

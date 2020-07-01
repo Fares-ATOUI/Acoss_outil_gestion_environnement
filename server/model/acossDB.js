@@ -551,10 +551,6 @@ exports.getTimeline3 = function (name, callback6) {
                 callback6(RestTimeline3)
 
             });
-
-
-
-
     }
     else (callback6(RestTimeline3))
 };
@@ -620,5 +616,64 @@ exports.getListProjetsIncubationPrevision = function (callback10) {
 
 };
 
+exports.getRequete = function (req, callback11) {
+    console.log(req)
+    client
+        .query(req)
+        .then(result => {
+            // console.log("result", result.rows)
+            if (result.rows.length) {
+                callback11(result.rows)
+            }
+        })
+        .catch(e =>
+            console.error(e.stack)
+        )
+};
+
+exports.insertRequete = function (data) {
+
+
+    let libelle = data[0].libelle
+    let req = data[0].req
+    console.log("server req : ", data)
+    const text = 'INSERT INTO admin_requete(libelle, req) VALUES($1, $2) RETURNING *'
+    const values = [libelle, req]
+
+
+    client
+        .query(text, values)
+        .then(result => {
+            console.log("result", result.rows)
+            //callback11(result.rows)
+        })
+        .catch(e => console.error(e.stack))
+};
+
+exports.getAdminRequete = function (callback12) {
+    client.query(`select * from admin_requete`)
+        .then(results => {
+            callback12(results.rows)
+        })
+        .catch(e => console.error(e.stack))
+};
+
+exports.deleteListAdminRequete = function (id) {
+    console.log(id, " bd")
+    client.query("delete from admin_requete   where id_req = '" + id + "'")
+
+    console.log("deleted: ")
+    return JSON.stringify("200")
+};
+
+exports.getListAdminDetails = function (id, callback13) {
+
+    client.query("select * from admin_requete where id_req = '" + id + "'")
+        .then(results => {
+            callback13(results.rows)
+        })
+
+
+};
 
 

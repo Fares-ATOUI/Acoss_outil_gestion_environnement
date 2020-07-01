@@ -36,7 +36,7 @@
                     class="dateeee"
                     :dates.sync="item.dateDeb"
                     :key="index"
-
+                    
                   />
                 </span>
               </p>
@@ -47,6 +47,8 @@
                     class="dateeee"
                     :dates.sync="item.date"
                     :key="index"
+                    :min="item.dateDeb"
+                    
                   />
                 </span>
               </p>
@@ -82,6 +84,7 @@ export default {
   props: ["values"],
   data() {
     return {
+      disabled3:true,
       items: [],
       fields,
       details: []
@@ -90,6 +93,9 @@ export default {
   },
 
   methods: {
+/*     deseble3(x){
+      this.disabled3 = x
+    }, */
     onChildDate(value) {
       this.values[this.details[0]]["dateDeb"] = value;
       console.log(this.values[this.details[0]].dateDeb);

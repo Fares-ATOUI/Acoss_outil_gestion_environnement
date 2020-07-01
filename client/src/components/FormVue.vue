@@ -3,14 +3,19 @@
 
   <h1 ><strong>Formulaire de demande de création</strong></h1>
 <!-------------------------------------------------INFO ACTEURS---------------------------------------------------->
-<p v-if="errors.length">
+<!-- <p v-if="errors.length">
     <b>Please correct the following error(s):</b>
-    <!-- {{showAlert(toString(errors))}} -->
+    
      <ul>
       <li v-for="error in errors" v-bind:key="error">{{error}}</li>
     </ul>
-  </p>
-    
+  </p> -->
+
+    <v-form
+      ref="form"
+      v-model="valid"
+      :lazy-validation="lazy"
+    >
   
 <v-card >
   <v-row>
@@ -214,15 +219,20 @@
       </v-col>
       <v-col cols="3">
        
-       <Date :dates="dateChamps" v-on:childToParent="onChildClick"/>
+       <Date @disabledToparent="deseble" :dates="dateChamps" v-on:childToParent="onChildClick" />
+       <p v-if="errors.dateChamps" style="color:red;"> veuillez remplir ce champ </p>
       </v-col>
+       
+
 
        
       <v-col cols="2">
-        <v-subheader>Entrée en INTEGRATION</v-subheader>
+        <v-subheader >Entrée en INTEGRATION</v-subheader>
       </v-col>
       <v-col cols="3">
-        <Date :dates="dateIntegration" v-on:childToParent="onChildDate"/>
+        <Date :disabled="disabled" @disabledToparent="deseble2" :dates="dateIntegration" :min="dateChamps" v-on:childToParent="onChildDate"/>
+   
+        <p v-if="errors.dateIntegration" style="color:red;"> veuillez remplir ce champ </p>
       </v-col>
     </v-row>
 
@@ -231,7 +241,8 @@
         <v-subheader>Entrée en TRAIN</v-subheader>
       </v-col>
       <v-col cols="3">
-       <Date :dates="dateTrain" v-on:childToParent="onChildDateMep"/>
+       <Date :disabled="disabled2" :dates="dateTrain" :min="dateIntegration" v-on:childToParent="onChildDateMep"/>
+       <p v-if="errors.dateTrain" style="color:red;"> veuillez remplir ce champ </p>
       </v-col>
       
   
@@ -350,9 +361,11 @@
       placeholder="Rechercher vos applications"
       track-by="name"
       label="name"
+
     >
       <span slot="noResult">Oops! Aucun élément trouvé. Pensez à modifier la requête de recherche.</span>
     </multiselect>
+    <p v-if="errors.valueTab" style="color:red;"> veuillez remplir ce champ </p>
           </v-col>
            <v-col cols="5">
       <!-- <Tableau2 v-if="valueTab.length" :values="valueTab"></Tableau2> -->
@@ -541,7 +554,7 @@
         <v-text-field
          v-model="moe"
           label="Nom MOE"
-          :rules="nameRules"
+          
           value=""
           prefix=""
           solo
@@ -557,7 +570,7 @@
         <v-text-field
          v-model="moa"
           label="Nom MOA"
-          :rules="nameRules"
+          
           value=""
           prefix=""
           solo
@@ -573,7 +586,7 @@
         <v-text-field
          v-model="mue"
           label="Nom MUE"
-          :rules="nameRules"
+          
           value=""
           prefix=""
           solo
@@ -589,7 +602,7 @@
         <v-text-field
          v-model="supportSDIT"
           label="Nom responsable SDIT"
-          :rules="nameRules"
+          
           value=""
           prefix=""
           solo
@@ -613,6 +626,7 @@
     
        <v-col cols="8" > 
          <Date v-if="checkbox9 == true" :dates="dateDemo"  v-on:childToParent="onChildDateDemo"/>
+
       </v-col>
         
     </v-row>
@@ -761,9 +775,10 @@
  </div>
     </v-card>
 
-      <v-btn class="mr-4" large color="success" dark @click="sendData" >Valider</v-btn>
+      <v-btn class="mr-4" large color="success" dark @click="validate" >Valider</v-btn>
 
   </v-card>
+    </v-form>
  </v-container>
 
 </template>
@@ -786,6 +801,8 @@ Vue.prototype.$event = new Vue()
     BulletChart
   },
     data: () => ({
+      disabled:true,
+      disabled2:true,
       isUpdate: false,
       errors:[],
       valueApp: [],
@@ -801,7 +818,7 @@ Vue.prototype.$event = new Vue()
       isHiddenDonnéesTechnique:false,
       isHiddenPortail:false,
       isHiddenAutre:false,
-
+      
       name: '',
       libelle:"",
       CpTechnique:'',
@@ -825,6 +842,7 @@ Vue.prototype.$event = new Vue()
       aux : [],
       dates:"",
       values:"",
+
       dateChamps:"",
       dateIntegration:"",
       dateTrain:"",
@@ -834,6 +852,21 @@ Vue.prototype.$event = new Vue()
       selectedItems:[],
       valuesDepAdh:[],
       dataAdherence:"",
+
+      erreurs:{},
+/*       test_date_fin_incub:false,
+      test_date_deb:false,
+      test_date_fin:false,
+      test_app:false,
+      test_mep:false, */
+      
+      testou:"",
+      testouDate_fin_incub:"",
+      testouDate_mep:"",
+      testou_App:"",
+      testou_date_deb:"",
+      testou_date_fin:"",
+
 
       nameRules: [
         v => !!v || 'veillez remplir le champ',
@@ -1169,6 +1202,7 @@ Vue.prototype.$event = new Vue()
     }),
 
     mounted: function() {
+
       console.log("this.values",this.values)
       this.$event.$on('parent', (data) => {
         this.valueAppTab = data
@@ -1190,23 +1224,15 @@ Vue.prototype.$event = new Vue()
       }
   },
 
-
-
-
     methods: {
-      showAlert(message) {
-      // Use sweetalert2
-      //this.$swal(message);
-      if(message){
-      this.$swal("Good job!", message, "success")
-      }else{
-        this.$swal("Good job!", "You are ready to start!", "success")
-      }
-      },
 
-    say: function (message) {
-      alert(message)
-    },
+      deseble(x){
+        this.disabled = x
+      },
+       deseble2(x){
+        this.disabled2 = x
+      },
+  
       mergeApp(valueAppMerge){
 
          let datamerge = []
@@ -1232,6 +1258,30 @@ Vue.prototype.$event = new Vue()
 
       validate () {
         this.$refs.form.validate()
+        this.errors = {}
+         if(!this.dateChamps) {
+           Object.assign(this.errors, {'dateChamps': true })
+        } 
+         if(!this.dateIntegration) {
+        Object.assign(this.errors, {'dateIntegration': true })
+      }
+          if(!this.dateTrain) {
+           Object.assign(this.errors, {'dateTrain': true })
+      }
+        if(!this.valueTab.length) {
+          Object.assign(this.errors, { 'valueTab': true })
+      }
+    console.log("from ",this.$refs.form.validate())
+    
+        if(this.$refs.form.validate() && !Object.keys(this.errors).length){ 
+         console.log(this.errors)
+        this.sendData()
+
+        }else {
+          console.log("no test", this.errors)
+    
+          //this.testou = "error "
+        }
       },
       reset () {
         this.$refs.form.reset()
@@ -1239,6 +1289,10 @@ Vue.prototype.$event = new Vue()
       resetValidation () {
         this.$refs.form.resetValidation()
       },
+
+      resetFields () {
+            Object.assign(this.$data, this.$options.data.call(this));
+        },
 
       getTotalTaxes() {
             let calTaxTotal =
@@ -1260,9 +1314,6 @@ Vue.prototype.$event = new Vue()
       this.dateIntegration = value
       console.log("dateIntegration ",value)
     },
-    /* onChildSelecterClick (value) {
-      this.code_organisation = value;
-    }, */
     onChildDateMep(value) {
       this.dateTrain = value;
       console.log("dateTrain ",value)
@@ -1271,14 +1322,12 @@ Vue.prototype.$event = new Vue()
       this.dateDemo = value;
     },
 
-    validForm:function() {
-    this.errors = [];
+   /*  validForm:function() {
+      this.errors = [];
     
       if(!this.NomProjet) {
         this.errors.push("Nom de projet requi.");
-      } /*else if(!/^hello/.test(this.libelle)) {
-        this.errors.push("Valid libelle required.");   0681425098     
-      }*/
+      } 
       else if(!this.NomProjet.length) {
         this.errors.push("Nom de projet requi.");        
       }
@@ -1305,14 +1354,14 @@ Vue.prototype.$event = new Vue()
         this.errors.push("date  MEP requise.");        
       }
       return this.errors.length;
-    },
+    }, */
 
 
 
 
   async sendData()
   {
-  if (this.validForm()) return;
+  //if (this.validForm()) return;
 
        let  info_Acteur_Projet = 
 
@@ -1437,13 +1486,12 @@ Vue.prototype.$event = new Vue()
       console.log(jsonResponse)
 
 
-this.resetFields()
+    this.resetFields()
+    this.reset()
 
   },
 
-   resetFields () {
-            Object.assign(this.$data, this.$options.data.call(this));
-        },
+   
 
 async recupeData(id)
   {

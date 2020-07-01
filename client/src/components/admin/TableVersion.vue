@@ -61,16 +61,23 @@ const fields = [
 ];
 
 export default {
-  props: ["items"],
 
-  computed: {
-    getItems() {
-      return this.items;
-    }
-  },
+
+mounted: function() {
+      fetch(
+        "http://localhost:3000/projet_ensemble_incubation_adherences_versions_differentes"
+      )
+        .then(reponse => {
+          return reponse.json();
+        })
+        .then(e => {
+          this.items = e;
+        });
+},
   name: "tables",
   data() {
     return {
+      items:[],
       fields,
       details: []
     };
