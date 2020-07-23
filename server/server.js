@@ -31,7 +31,7 @@ db.insertForm(data)
 //get data from form 
 app.put('/data', function (req, res) {
   data = req.body
-  console.log("id",req.query.id)
+  console.log("data MAJ : ",data.v2_details)
   db.updateForm(data, req.query.id)
   res.json({
     status: "success"
