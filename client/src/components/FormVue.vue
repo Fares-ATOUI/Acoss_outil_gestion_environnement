@@ -320,31 +320,6 @@
 
 <v-card>
 
-     <!--<v-row>
-    <v-col cols="2">
-        <v-subheader>Technique / Fonctionnel</v-subheader>
-      </v-col>
-     <v-row>
-      <v-col cols="5">
-           <v-autocomplete
-          v-model="valueApp"
-          :items="itemsDependance"
-          item-text="name"
-          v-bind:item-value="valueee"
-          dense
-          chips
-          small-chips
-          label="Ajouter une dépendance/adhérence"
-          multiple
-          solo
-        ></v-autocomplete>
-      </v-col>
-       <v-col cols="5">
-        <Tableau v-if="valueApp.length" :values="valueApp"></Tableau>
-      </v-col>
-     </v-row>
-       </v-row>
--->
             <v-row>
     <v-col cols="2">
         <v-subheader>Technique / Fonctionnel</v-subheader>
@@ -368,7 +343,6 @@
     <p v-if="errors.valueTab" style="color:red;"> veuillez remplir ce champ </p>
           </v-col>
            <v-col cols="5">
-      <!-- <Tableau2 v-if="valueTab.length" :values="valueTab"></Tableau2> -->
       <BulletChart v-if="valueTab.length" :values="valueTab" @update="valueTab = $event"></BulletChart>
     </v-col>
 
@@ -391,11 +365,8 @@
     </v-row>
 
     <div v-if="checkbox3 == true">
-     <v-row>
-      <v-col cols="2">
-        <v-subheader>Code Organisation</v-subheader>
-      </v-col>
-      <v-col cols="3">
+     
+<!--       <v-col cols="3">
               <v-select
             v-model="code_organisation"
             :items="codeOrg"
@@ -405,8 +376,8 @@
             multiple
             solo
           ></v-select>
-      </v-col>
-        <v-col cols="3">
+      </v-col> -->
+<!--         <v-col cols="3">
 
 <v-text-field
       v-if="code_organisation.length"
@@ -417,8 +388,9 @@
       solo
     ></v-text-field>
 
-      </v-col>
-    </v-row>
+      </v-col> -->
+    
+
     <v-row>
       <v-col cols="2">
         <v-subheader>Conteneur V2</v-subheader>
@@ -446,7 +418,6 @@
       </v-col>
 
  
-
       <v-col cols="2">
         <v-subheader>Web Service</v-subheader>
       </v-col>
@@ -454,6 +425,69 @@
            <v-checkbox v-model="checkbox8" :label="`Oui / Non `"></v-checkbox>
       </v-col>
     </v-row>
+
+    <v-row>
+      <v-col cols="2">
+        <v-subheader>Installation de lot fréquente</v-subheader>
+      </v-col>
+      <v-col cols="3">
+           <v-checkbox v-model="checkbox20" :label="`Oui / Non `"></v-checkbox>
+      </v-col>
+
+ 
+      <v-col cols="2">
+        <v-subheader>Lancement sessions batch fréquentes</v-subheader>
+      </v-col>
+      <v-col cols="3">
+           <v-checkbox v-model="checkbox21" :label="`Oui / Non `"></v-checkbox>
+      </v-col>
+    </v-row>
+
+ <v-row>
+      <v-col cols="2">
+        <v-subheader>Restauration de donnée fréquente</v-subheader>
+      </v-col>
+      <v-col cols="3">
+           <v-checkbox v-model="checkbox22" :label="`Oui / Non `"></v-checkbox>
+      </v-col>
+
+ 
+      <v-col cols="2">
+        <v-subheader>Editique</v-subheader>
+      </v-col>
+      <v-col cols="3">
+           <v-checkbox v-model="checkbox23" :label="`Oui / Non `"></v-checkbox>
+      </v-col>
+    </v-row>
+
+<v-row>
+      <v-col cols="2">
+        <v-subheader>Code Organisation</v-subheader>
+      </v-col>
+      <v-row>
+      <v-col cols="5">
+    <multiselect
+      v-model="valueOrg"
+      :options="codeOrg"
+      :multiple="true"
+      group-values="libs"
+      group-label="couloir"
+      :group-select="true"
+      placeholder="Rechercher vos applications"
+      track-by="name"
+      label="name"
+
+    >
+      <span slot="noResult">Oops! Aucun élément trouvé. Pensez à modifier la requête de recherche.</span>
+    </multiselect>
+    <p v-if="errors.valueTab" style="color:red;"> veuillez remplir ce champ </p>
+          </v-col>
+     <v-col cols="5">
+      <tableauCodeOrganisme v-if="valueOrg.length" :values="valueOrg" @update="valueOrg = $event"></tableauCodeOrganisme>
+    </v-col>
+      </v-row>
+    </v-row>
+    
     </div>
 </v-card>
 </div>
@@ -554,14 +588,11 @@
         <v-text-field
          v-model="moe"
           label="Nom MOE"
-          
           value=""
           prefix=""
           solo
         ></v-text-field>
       </v-col>
-
-
 
       <v-col cols="2">
         <v-subheader>Nom MOA</v-subheader>
@@ -570,7 +601,6 @@
         <v-text-field
          v-model="moa"
           label="Nom MOA"
-          
           value=""
           prefix=""
           solo
@@ -786,7 +816,7 @@
 <script>
 import Date from './date';
 import Multiselect from "vue-multiselect";
-//import Tableau2 from "./Tableau2"
+import tableauCodeOrganisme from "./tableauCodeOrganisme"
 import BulletChart from "./timeline/bulletChart"
 import Vue from 'vue'    
 var moment = require("moment");
@@ -796,7 +826,7 @@ Vue.prototype.$event = new Vue()
 
   components: {
     Date,
-    //Tableau2,
+    tableauCodeOrganisme,
     Multiselect,
     BulletChart
   },
@@ -819,6 +849,7 @@ Vue.prototype.$event = new Vue()
       isHiddenPortail:false,
       isHiddenAutre:false,
       
+      valueOrg:[],
       name: '',
       libelle:"",
       CpTechnique:'',
@@ -853,19 +884,10 @@ Vue.prototype.$event = new Vue()
       valuesDepAdh:[],
       dataAdherence:"",
 
+      connecteeArchimed:false,
+      connecteeEsb:false,
+
       erreurs:{},
-/*       test_date_fin_incub:false,
-      test_date_deb:false,
-      test_date_fin:false,
-      test_app:false,
-      test_mep:false, */
-      
-      testou:"",
-      testouDate_fin_incub:"",
-      testouDate_mep:"",
-      testou_App:"",
-      testou_date_deb:"",
-      testou_date_fin:"",
 
 
       nameRules: [
@@ -886,11 +908,447 @@ Vue.prototype.$event = new Vue()
         'Long terme',
       ],
 
-      codeOrg: [
-        'UT837',
-        'UR837',
-        'UR838'
-      ],
+   codeOrg: 
+   [
+    {
+            couloir: "C1",
+            
+            libs: [
+            {
+                name: "UR117 sx531int117x.cer31.recouv",
+                code_org: "UR117",
+                add_serveur: "sx531int117x.cer31.recouv",
+                couloir: "C1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR172 sx531int172x.cer31.recouv",
+                code_org: "UR172",
+                add_serveur: "sx531int172x.cer31.recouv",
+                couloir: "C1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR219 sx531int219x.cer31.recouv",
+                code_org: "UR219",
+                add_serveur: "sx531int219x.cer31.recouv",
+                couloir: "C1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR529 sx531int529x.cer31.recouv",
+                code_org: "UR529",
+                add_serveur: "sx531int529x.cer31.recouv",
+                couloir: "C1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR547 sx531int547x.cer31.recouv",
+                code_org: "UR547",
+                add_serveur: "sx531int547x.cer31.recouv",
+                couloir: "C1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR727 sx531int727x.cer31.recouv",
+                code_org: "UR727",
+                add_serveur: "sx531int727x.cer31.recouv",
+                couloir: "C1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR747 sx531int747x.cer31.recouv",
+                code_org: "UR747",
+                add_serveur: "sx531int747x.cer31.recouv",
+                couloir: "C1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR748 sx531int748x.cer31.recouv",
+                code_org: "UR748",
+                add_serveur: "sx531int748x.cer31.recouv",
+                couloir: "C1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR754 sx531int754x.cer31.recouv",
+                code_org: "UR754",
+                add_serveur: "sx531int754x.cer31.recouv",
+                couloir: "C1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR827 sx531int827x.cer31.recouv",
+                code_org: "UR827",
+                add_serveur: "sx531int827x.cer31.recouv",
+                couloir: "C1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR837 sx531int837x.cer31.recouv",
+                code_org: "UR837",
+                add_serveur: "sx531int837x.cer31.recouv",
+                couloir: "C1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR917 sx531int917x.cer31.recouv",
+                code_org: "UR917",
+                add_serveur: "sx531int917x.cer31.recouv",
+                couloir: "C1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR937 sx531int937x.cer31.recouv",
+                code_org: "UR937",
+                add_serveur: "sx531int937x.cer31.recouv",
+                couloir: "C1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR974 sx531int974x.cer31.recouv",
+                code_org: "UR974",
+                add_serveur: "sx531int974x.cer31.recouv",
+                couloir: "C1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR976 sx531int976x.cer31.recouv",
+                code_org: "UR976",
+                add_serveur: "sx531int976x.cer31.recouv",
+                couloir: "C1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+        ]
+    },
+    {
+            couloir: "C2",
+                        libs: [
+            {
+                name: "UR117 sx531int117x.cer31.recouv",
+                code_org: "UR117",
+                add_serveur: "sx531int117x.cer31.recouv",
+                couloir: "C2",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR172 sx531int172x.cer31.recouv",
+                code_org: "UR172",
+                add_serveur: "sx531int172x.cer31.recouv",
+                couloir: "C2",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR219 sx531int219x.cer31.recouv",
+                code_org: "UR219",
+                add_serveur: "sx531int219x.cer31.recouv",
+                couloir: "C2",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR529 sx531int529x.cer31.recouv",
+                code_org: "UR529",
+                add_serveur: "sx531int529x.cer31.recouv",
+                couloir: "C2",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR547 sx531int547x.cer31.recouv",
+                code_org: "UR547",
+                add_serveur: "sx531int547x.cer31.recouv",
+                couloir: "C2",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR727 sx531int727x.cer31.recouv",
+                code_org: "UR727",
+                add_serveur: "sx531int727x.cer31.recouv",
+                couloir: "C2",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR747 sx531int747x.cer31.recouv",
+                code_org: "UR747",
+                add_serveur: "sx531int747x.cer31.recouv",
+                couloir: "C2",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR748 sx531int748x.cer31.recouv",
+                code_org: "UR748",
+                add_serveur: "sx531int748x.cer31.recouv",
+                couloir: "C2",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR754 sx531int754x.cer31.recouv",
+                code_org: "UR754",
+                add_serveur: "sx531int754x.cer31.recouv",
+                couloir: "C2",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR827 sx531int827x.cer31.recouv",
+                code_org: "UR827",
+                add_serveur: "sx531int827x.cer31.recouv",
+                couloir: "C2",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR837 sx531int837x.cer31.recouv",
+                code_org: "UR837",
+                add_serveur: "sx531int837x.cer31.recouv",
+                couloir: "C2",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR917 sx531int917x.cer31.recouv",
+                code_org: "UR917",
+                add_serveur: "sx531int917x.cer31.recouv",
+                couloir: "C2",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR937 sx531int937x.cer31.recouv",
+                code_org: "UR937",
+                add_serveur: "sx531int937x.cer31.recouv",
+                couloir: "C2",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR974 sx531int974x.cer31.recouv",
+                code_org: "UR974",
+                add_serveur: "sx531int974x.cer31.recouv",
+                couloir: "C2",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR976 sx531int976x.cer31.recouv",
+                code_org: "UR976",
+                add_serveur: "sx531int976x.cer31.recouv",
+                couloir: "C2",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+        ]
+    },
+    {
+            couloir: "CLEA1",
+                        libs: [
+            {
+                name: "UR116 sx531int116z.cer31.recouv",
+                code_org: "UR116",
+                add_serveur: "sx531int116z.cer31.recouv",
+                couloir: "CLEA1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR117 sx531int117z.cer31.recouv",
+                code_org: "UR117",
+                add_serveur: "sx531int117z.cer31.recouv",
+                couloir: "CLEA1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR172 sx531int172z.cer31.recouv",
+                code_org: "UR172",
+                add_serveur: "sx531int172z.cer31.recouv",
+                couloir: "CLEA1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR219 sx531int219z.cer31.recouv",
+                code_org: "UR219",
+                add_serveur: "sx531int219z.cer31.recouv",
+                couloir: "CLEA1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR257 sx531int257z.cer31.recouv",
+                code_org: "UR257",
+                add_serveur: "sx531int257z.cer31.recouv",
+                couloir: "CLEA1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR417 sx531int417z.cer31.recouv",
+                code_org: "UR417",
+                add_serveur: "sx531int417z.cer31.recouv",
+                couloir: "CLEA1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR427 sx531int427z.cer31.recouv",
+                code_org: "UR427",
+                add_serveur: "sx531int427z.cer31.recouv",
+                couloir: "CLEA1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR529 sx531int529z.cer31.recouv",
+                code_org: "UR529",
+                add_serveur: "sx531int529z.cer31.recouv",
+                couloir: "CLEA1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR537 sx531int537z.cer31.recouv",
+                code_org: "UR537",
+                add_serveur: "sx531int537z.cer31.recouv",
+                couloir: "CLEA1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR547 sx531int547z.cer31.recouv",
+                code_org: "UR547",
+                add_serveur: "sx531int547z.cer31.recouv",
+                couloir: "CLEA1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR727 sx531int729p.cer31.recouv",
+                code_org: "UR727",
+                add_serveur: "sx531int729p.cer31.recouv",
+                couloir: "CLEA1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR747 sx531int747z.cer31.recouv",
+                code_org: "UR747",
+                add_serveur: "sx531int747z.cer31.recouv",
+                couloir: "CLEA1"
+            },
+            {
+                name: "UR748 sx531int748z.cer31.recouv",
+                code_org: "UR748",
+                add_serveur: "sx531int748z.cer31.recouv",
+                couloir: "CLEA1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR754 sx531int754z.cer31.recouv",
+                code_org: "UR754",
+                add_serveur: "sx531int754z.cer31.recouv",
+                couloir: "CLEA1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR827 sx531int827a.cer31.recouv",
+                code_org: "UR827",
+                add_serveur: "sx531int827a.cer31.recouv",
+                couloir: "CLEA1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR837 sx531int839p.cer31.recouv",
+                code_org: "UR837",
+                add_serveur: "sx531int839p.cer31.recouv",
+                couloir: "CLEA1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR917 sx531int919p.cer31.recouv",
+                code_org: "UR917",
+                add_serveur: "sx531int919p.cer31.recouv",
+                couloir: "CLEA1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR937 sx531int939p.cer31.recouv",
+                code_org: "UR937",
+                add_serveur: "sx531int939p.cer31.recouv",
+                couloir: "CLEA1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR937 sx531int937w.cer31.recouv",
+                code_org: "UR937",
+                add_serveur: "sx531int937w.cer31.recouv",
+                couloir: "CLEA1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR937 sx531int939i.cer31.recouv",
+                code_org: "UR937",
+                add_serveur: "sx531int939i.cer31.recouv",
+                couloir: "CLEA1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR937 sx531int939j.cer31.recouv",
+                code_org: "UR937",
+                add_serveur: "sx531int939j.cer31.recouv",
+                couloir: "CLEA1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR974 sx531int974z.cer31.recouv",
+                code_org: "UR974",
+                add_serveur: "sx531int974z.cer31.recouv",
+                couloir: "CLEA1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+            {
+                name: "UR976 sx531int976z.cer31.recouv",
+                code_org: "UR976",
+                add_serveur: "sx531int976z.cer31.recouv",
+                couloir: "CLEA1",
+                dates:[{dateDebOrg: "2020-10-10",
+                     dateFinOrg: "2020-11-11"}],
+            },
+        ]
+    },
+   ],
       labelCodeOrg:"veuillez selectionner un code org",
       acces: [
         'Saturne',
@@ -1173,8 +1631,8 @@ Vue.prototype.$event = new Vue()
               }
             ]
           }
-        ],
-        valueTab: [],
+     ],
+    valueTab: [],
 
       lableTechnique:"Veuillez selectionner les applications Techniques",
 
@@ -1199,6 +1657,12 @@ Vue.prototype.$event = new Vue()
         checkbox17: false,
         checkbox18: false,
         checkbox19: false,
+        checkbox20: false,
+        checkbox21: false,
+        checkbox22: false,
+        checkbox23: false,
+        //checkbox24: false,
+        //checkbox25: false,
     }),
 
     mounted: function() {
@@ -1271,7 +1735,6 @@ Vue.prototype.$event = new Vue()
         if(!this.valueTab.length) {
           Object.assign(this.errors, { 'valueTab': true })
       }
-    console.log("from ",this.$refs.form.validate())
     
         if(this.$refs.form.validate() && !Object.keys(this.errors).length){ 
          console.log(this.errors)
@@ -1279,8 +1742,6 @@ Vue.prototype.$event = new Vue()
 
         }else {
           console.log("no test", this.errors)
-    
-          //this.testou = "error "
         }
       },
       reset () {
@@ -1364,12 +1825,10 @@ Vue.prototype.$event = new Vue()
   //if (this.validForm()) return;
 
        let  info_Acteur_Projet = 
-
         [
           { 
             info :
               {
-
                   nom_Projet : this.NomProjet,
                   libel: this.libelle,
                   chef_projet_tech: this.CpTechnique,
@@ -1390,13 +1849,10 @@ Vue.prototype.$event = new Vue()
                   echeances: this.selectedItems,
               },
           
-
-          
               bascule_validation :
               {
                   besoin_bascule : this.checkbox1,
                   besoin_validation: this.checkbox2,
-        
               },
 
               dependance_adherence:
@@ -1408,11 +1864,15 @@ Vue.prototype.$event = new Vue()
               {
                   v2 : this.checkbox3,
                   code_organisation: this.code_organisation,
-                  justificaiton: this.justification,
+                  installation_de_lot_frequente: this.checkbox20,
+                  lancement_sessions_batch_frequentes: this.checkbox21,
+                  restauration_de_donnee_frequente: this.checkbox22,
+                  editique: this.checkbox23,
                   contenuer_v2:this.checkbox5,
                   batch_v2:this.checkbox6,
                   transaction: this.checkbox7,
                   web_service: this.checkbox8,
+                  v2_details:this.valueOrg
               },
 
               vm: 
@@ -1471,7 +1931,7 @@ Vue.prototype.$event = new Vue()
         }
         else {
           
-          option = {
+        option = {
          method: 'PUT',
          headers: {
           'Content-Type': 'application/json'
@@ -1485,22 +1945,20 @@ Vue.prototype.$event = new Vue()
       const jsonResponse = await response.json()
       console.log(jsonResponse)
 
-
     this.resetFields()
     this.reset()
 
   },
 
-   
-
 async recupeData(id)
   {
+        
         const response = await fetch(
         "http://localhost:3000/historique/details/" + id
       );
       let jsonResponse = await response.json();
 
-
+          console.log("reponse : ",jsonResponse)
             let aux = jsonResponse.map(item => {
             let dataformat = moment(item.date_integration).format("YYYY-MM-DD");
             let dataformatmep = moment(item.date_mep).format("YYYY-MM-DD");
@@ -1512,7 +1970,6 @@ async recupeData(id)
             let data_format_demo = moment(item.date_demo).format("YYYY-MM-DD");
             item.date_demo = data_format_demo
             }
-            
             if(item.date_deb){
               let date_deb_app = moment(item.date_deb).format("YYYY-MM-DD");
               item.date_deb = date_deb_app
@@ -1526,7 +1983,6 @@ async recupeData(id)
             item.date_livraison = data_format_livraison;
             
             
-           
 
             return item;
           });
@@ -1554,8 +2010,10 @@ async recupeData(id)
       this.checkbox13 = jsonResponse[0].portail_urssaf
 
       this.checkbox3 = jsonResponse[0].v2
+
+
       //code_org
-      if(jsonResponse[0].code_organisation){
+/*       if(jsonResponse[0].code_organisation){
       let y = jsonResponse[0].code_organisation.replace('{','')
       let x = y.replace('}', '')
       let n = x.replace(/"/g, '')
@@ -1566,13 +2024,18 @@ async recupeData(id)
       }else{
         this.code_organisation = n
       }
-      }
+      } */
       
       this.justification = jsonResponse[0].justification_code_org
       this.checkbox5 = jsonResponse[0].conteneur_v2
       this.checkbox6 = jsonResponse[0].batch_v2
       this.checkbox7 = jsonResponse[0].transaction
       this.checkbox8 = jsonResponse[0].web_service
+      this.checkbox20 = jsonResponse[0].instal_lot_freq
+      this.checkbox21 = jsonResponse[0].lancement_session_batch_freq
+      this.checkbox22 = jsonResponse[0].restauration_donnee_freq
+      this.checkbox23 = jsonResponse[0].editique
+
 
       this.checkbox4 = jsonResponse[0].besoin_vm
       this.combien = jsonResponse[0].combien_vm
@@ -1612,7 +2075,48 @@ async recupeData(id)
       this.checkbox17 = jsonResponse[0].jeux_de_donnes
       this.commentaire = jsonResponse[0].commentaire
 
-      jsonResponse.forEach(element => {
+
+      let tab_app = [];
+      
+      let tab_v2 = [];
+
+
+      jsonResponse.forEach((el) => {
+        
+        if (tab_app.length == 0) tab_app.push(el);
+    
+        else { 
+          let x = false;
+          let i = el.nom_app;
+          tab_app.forEach((ele) => {
+          if (ele.nom_app == i) {
+            x = true;
+          }
+        });
+        if (!x) {
+          tab_app.push(el);
+        }
+        }
+
+        if (tab_v2.length == 0)  tab_v2.push(el);
+    
+        else { 
+          let y = false;
+          let i = el.add_server;
+          tab_v2.forEach((elements) => {
+          if (elements.add_server == i) {
+            y = true;
+          }
+        });
+        if (!y) {
+          tab_v2.push(el);
+        }
+        }
+      })
+      console.log("tab v 2 : ",tab_v2)
+
+
+        tab_app.forEach(element => {
         let nom = element.nom_app
         let domaine1 = element.domaine
         let commentaire_app = element.commentaire_app
@@ -1631,6 +2135,30 @@ async recupeData(id)
 
         })
       });
+
+     tab_v2.forEach(element => {
+       
+        let code_org = element.code_org
+        let add_server = element.add_server
+        let couloir = element.couloir
+        let justification_v2 = element.justification
+        let connectee_archimed = element.connectee_archimed
+        let esb = element.connectee_esb
+        let name = element.code_org + " " + element.add_server
+
+  
+      this.valueOrg.push({
+        name : name,
+        code_org : code_org,
+        add_serveur : add_server,
+        couloir: couloir, 
+        justification: justification_v2,
+        archimed: connectee_archimed,
+        esb : esb,
+
+        })
+        console.log("value org : maj : ", this.valueOrg)
+      });  
     
       
  },
