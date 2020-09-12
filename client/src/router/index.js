@@ -13,6 +13,7 @@ import prevision from '../components/tableau/prevision.vue'
 import ProjetMep from '../components/admin/Table.vue'
 import ProjetCouloir from '../components/admin/TableVue.vue'
 import ProjetVersion from '../components/admin/TableVersion.vue'
+import crud from '../components/crud/crud.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -28,7 +29,8 @@ const routes = [
   { path: '/projet/mep', component: ProjetMep },
   { path: '/projet/couloir', component: ProjetCouloir },
   { path: '/projet/version', component: ProjetVersion },
-  { path: '/prevision', component: prevision }
+  { path: '/prevision', component: prevision },
+  { path: '/crud', component: crud }
 ]
 
 const router = new VueRouter({

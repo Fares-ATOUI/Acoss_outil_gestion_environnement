@@ -2,8 +2,6 @@
   <CDataTable
     :items="values"
     :fields="fields"
-    column-filter
-    table-filter
     items-per-page-select
     hover
     sorter
@@ -26,12 +24,10 @@
       <CCollapse :show="details.includes(index)">
         <CCardBody>
           <CMedia :aside-image-props="{ height: 102 }">
-               {{item}}
-            <!-- <v-checkbox v-model="item.cbatch" :key="index" :label="`Lancement sessions batch fréquente`"></v-checkbox> -->
+
             <v-select
               v-model="item.justification"
               :items="itemsJustification"
-              
               attach
               chips
               label="Justification"
@@ -39,10 +35,9 @@
             ></v-select>
              <v-checkbox v-model="item.archimed" :label="`Connectée Archimed`"></v-checkbox>
             <v-checkbox v-model="item.esb" :label="`Connectée ESB`"></v-checkbox>
-            <!--<v-checkbox v-model="item.crestauration" :key="index" :label="`Editique`"></v-checkbox>-->
             <v-row>
-            <v-button @click="addDate(index, item)" ><img src="https://img.icons8.com/color/48/000000/calendar-plus.png"/></v-button>
-            <v-button @click="deleteDate(index, item)" ><img src="https://img.icons8.com/color/48/000000/calendar-minus.png"/></v-button>
+            <v-button @click="addDate(index, item)" name="addDate" ><img src="https://img.icons8.com/color/48/000000/calendar-plus.png"/></v-button>
+            <v-button @click="deleteDate(index, item)" name="deleteDate"><img src="https://img.icons8.com/color/48/000000/calendar-minus.png"/></v-button>
             </v-row>
             <div v-for="(dateInput, dateIndex) in item.dates" v-bind:key="dateIndex">
               <v-row>
@@ -79,7 +74,7 @@ const fields = [
   { key: "couloir", _style: "width:40%;" },
   {
     key: "show_details",
-    label: "Adhérence",
+    label: "",
     _style: "width:1%",
     sorter: false,
     filter: false
@@ -137,9 +132,10 @@ export default {
       
     },
     deleteDate(index,item){
-
+      if(item.dates.length > 1){
       item.dates.pop()
       console.log(item)
+      }
     },
 
     getDateDebOrg(dateDebOrg, i) {

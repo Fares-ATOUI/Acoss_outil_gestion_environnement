@@ -1,35 +1,6 @@
 <template>
   <v-app>
-    <!--
-    <v-app-bar
-      app
-      color="blue"
-      dark
-      dense
-    >
-      <div class="d-flex align-center">
 
-        <v-img alt="Vuetify Name" class="shrink mt-1 hidden-sm-and-down" contain  min-width="100" src="https://upload.wikimedia.org/wikipedia/commons/0/0a/Logo_acoss.png"
-          width="100"
-        />
-        
-      </div>
-
-         <template v-slot:extension>
-        <v-tabs d-flex align-center>
-          <v-tab href="/form">Formulaire</v-tab>
-          <v-tab href="/timeline" >Timeline</v-tab>
-          <v-tab href="/timeline2">Timeline 2</v-tab>
-          <v-tab href="/timeline3">Timeline 3</v-tab>
-          <v-tab href="/Historique">Historique</v-tab>
-          <v-tab href="/admin">Admin</v-tab>
-          <v-tab href="/chart">chart</v-tab>
-           <v-tab href="/tableau">tableau</v-tab>
-        </v-tabs>
-      </template>   
-    </v-app-bar>
-
-    -->
     <v-content>
       <template>
         <b-navbar toggleable="md" type="dark" class="nav-background">
@@ -78,8 +49,8 @@
                   <b-dropdown-item href="/prevision">Prévision</b-dropdown-item>
                   <b-dropdown-item href="/tableau">Projets Incubation</b-dropdown-item>
                   <b-dropdown-divider />
-                  <b-dropdown-item-button disabled>chart</b-dropdown-item-button>
-                  <b-dropdown-item href="/chart">Projets en incubation par couloir</b-dropdown-item>
+                  <b-dropdown-item-button disabled>CRUD</b-dropdown-item-button>
+                  <b-dropdown-item href="/crud">Administration des listes</b-dropdown-item>
                 </b-nav-item-dropdown>
                 <!--         <b-nav-item  >Administration</b-nav-item>
         <b-nav-item  >statistique</b-nav-item>
