@@ -101,7 +101,7 @@ exports.list_admin_requete = function (req, res) {
 };
 
 exports.delete_list_admin_requete = function (req, res) {
-    console.log("rest apo : ", req.params.id)
+   
     res.send(db.deleteListAdminRequete(req.params.id));
 };
 
@@ -111,4 +111,43 @@ exports.list_admin_details = function (req, res) {
         res.send(list)
     })
 };
+
+exports.list_crud = function (req, res) {
+    db.getCrud(req.params.opt, function (list) {
+        res.send(list)
+    })
+};
+ 
+exports.getLogiciels = function (req, res) {
+    db.getListLogiciels(function (lostes) {
+        res.send(lostes)
+    })
+};  
+exports.getAcces = function (req, res) {
+    db.getListAcces(function (listes) {
+        res.send(listes)
+    })
+}; 
+
+exports.getFonction = function (req, res) {
+    db.getListFonction(function (listes) {
+        res.send(listes)
+    })
+};  
+
+exports.getBdd = function (req, res) {
+    db.getListBdd(function (listes) {
+        res.send(listes)
+    })
+};  
+
+exports.getV2 = function (req, res) {
+    db.getListV2(function (listes) {
+        res.send(listes)
+    })
+}; 
+
+
+
+
 

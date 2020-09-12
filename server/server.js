@@ -31,7 +31,7 @@ db.insertForm(data)
 //get data from form 
 app.put('/data', function (req, res) {
   data = req.body
-  console.log("data MAJ : ",data.v2_details)
+
   db.updateForm(data, req.query.id)
   res.json({
     status: "success"
@@ -39,7 +39,6 @@ app.put('/data', function (req, res) {
 })
 
 app.post('/requete', function (req, res) {
-  console.log("server / ", req.body)
   data = req.body
   db.insertRequete(data)
   res.json({
@@ -49,6 +48,22 @@ app.post('/requete', function (req, res) {
 
 app.get('/test', function (req, res) {
   res.send(data);
+})
+
+app.post('/insertCrud', function (req, res) {
+  data = req.body
+  db.insertCrud(data)
+  res.json({
+    status: "success crud "
+  });
+})
+
+app.delete('/delete', function (req, res) {
+  data = req.body
+  db.deleteListPlateforme(data)
+ res.json({
+    status: "delete  crud "
+  }); 
 })
 
 

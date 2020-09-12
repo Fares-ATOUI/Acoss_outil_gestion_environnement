@@ -43,6 +43,9 @@ exports.insertForm = function (data) {
     let jh_recette = data[0].info.jour_homme_recette
     let jh_total = data[0].info.jour_homme_total
 
+    let intervenants = data[0].intervenants.intervenants
+
+
     let date_entree_incubation = data[0].dates.date_incubation ? data[0].dates.date_incubation : null
     let date_entree_integration = data[0].dates.date_integration ? data[0].dates.date_integration : null
     let date_mep = data[0].dates.date_mep ? data[0].dates.date_mep : null
@@ -74,6 +77,8 @@ exports.insertForm = function (data) {
     let besoin_vm = data[0].vm.vm
     let combien_vm = data[0].vm.nombre_vm
     let logiciel_vm = data[0].vm.logicel_vm
+    let besoin_specefique = data[0].vm.besoin_specefique
+    //let logiciel_vm_tab = data[0].vm.logiciel_vm_tab
 
     let v2 = data[0].v2.v2
     let code_organisation = data[0].v2.code_organisation
@@ -90,6 +95,8 @@ exports.insertForm = function (data) {
 
     let v2_details = data[0].v2.v2_details
 
+    let demo = data[0].demo.demo
+
     let acces = data[0].acces.acces
 
     let dataTech = data[0].dependance_adherence.technique
@@ -104,10 +111,6 @@ exports.insertForm = function (data) {
 
 
 
-    console.log("here : ", heureInsertion)
-    console.log("date ", dt.date_format(dateInsertion))
-
-
     const text3 = 'INSERT INTO projet(code_projet, date_insertion, heure_insertion) VALUES($1, $2, $3) RETURNING *'
     const values3 = [nom_projet, dateInsertion, heureInsertion]
 
@@ -118,7 +121,6 @@ exports.insertForm = function (data) {
         .then(resultat => {
 
             let idprojet = resultat.rows[0].id_projet
-            console.log("acoss fb : id_projet: ", resultat.rows)
 
             client
                 .query(`select * from application`)
@@ -139,14 +141,14 @@ exports.insertForm = function (data) {
                             let id_app_param = element.id_app
 
                             if (nom_app == element.nom_app) {
-                                console.log("ok insertion application acoss db : ")
+                               
                                 const text4 = "INSERT INTO application_form(nom_app, domaine, type_app, id_responsable, description, id_app_param, id_projet, adherence, commentaire_app, date_fin, date_deb) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *"
                                 const values4 = [nom_app, domaine, type_app, id_resp, description, id_app_param, idprojet, adherence, commentaire_app, dateFinApp, dateDebApp]
 
                                 client
                                     .query(text4, values4)
                                     .then(resultat => {
-                                        console.log("application acoss : ", resultat.rows[0])
+                                        console.log(" INSERTION application  : ", resultat.rows[0])
                                         let app = resultat.rows[0].id_app_param
 
                                         const text = 'INSERT INTO projet_lot( code_projet, libelle, cp_technique, email, jh_concept, jh_integration, jh_dev, jh_recette, jh_total, date_livraison, date_integration, id_responsable,  id_projet, date_mep, id_app, echeance, cp_fonctionnel, besoin_bascule, besoin_validation ) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19) RETURNING *'
@@ -155,7 +157,7 @@ exports.insertForm = function (data) {
                                         client
                                             .query(text, values)
                                             .then(res => {
-                                                console.log("acoss db insertion  projet lot : ", res.rows[0])
+                                                console.log(" INSERTION  projet lot : ", res.rows[0])
 
 
                                             });
@@ -168,8 +170,8 @@ exports.insertForm = function (data) {
                 });
 
 
-            const text5 = 'INSERT INTO donnes_techniques(besoin_vm, combien_vm, logiciel, acces, test_nom_moa, test_nom_moe, test_nom_mue, test_responsable_sdit, besoin_demo_presentation, date_demo, portail_pora, portail_harmony_web, portail_harmony_rcp, portail_urssaf, accrochage_partenaire, nouvelle_application_anais, nom_applicaiton_anais, nouvelle_gris_droit, nom_application_gris, jeux_de_donnes, commentaire, v2, conteneur_v2, transaction, batch_v2, web_service, code_organisation, justification_code_org, id_projet,instal_lot_freq, lancement_session_batch_freq, restauration_donnee_freq, editique) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33) RETURNING *'
-            const values5 = [besoin_vm, combien_vm, logiciel_vm, acces, nom_moa, nom_moe, nom_mue, support_sdit, demo_presentation, date_demo, pora, harmony_web, harmony_rcp, urssaf_fr, accrochage_avec_partenaire, nouvelle_application_anais, nom_application_anais, nouvelle_gris_de_droit, application_gris_droit, flux_entrant_sortant, commentaire_flux, v2, conteneur_v2, transaction, batch_v2, web_service, code_organisation, justificaiton, idprojet, installation_de_lot_frequente, lancement_sessions_batch_frequentes, restauration_de_donnee_frequente, editique]
+            const text5 = 'INSERT INTO donnes_techniques(besoin_vm, combien_vm, logiciel, acces, test_nom_moa, test_nom_moe, test_nom_mue, test_responsable_sdit, besoin_demo_presentation, date_demo, portail_pora, portail_harmony_web, portail_harmony_rcp, portail_urssaf, accrochage_partenaire, nouvelle_application_anais, nom_applicaiton_anais, nouvelle_gris_droit, nom_application_gris, jeux_de_donnes, commentaire, v2, conteneur_v2, transaction, batch_v2, web_service, code_organisation, justification_code_org, id_projet,instal_lot_freq, lancement_session_batch_freq, restauration_donnee_freq, editique, besoin_specefique) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34) RETURNING *'
+            const values5 = [besoin_vm, combien_vm, logiciel_vm, acces, nom_moa, nom_moe, nom_mue, support_sdit, demo_presentation, date_demo, pora, harmony_web, harmony_rcp, urssaf_fr, accrochage_avec_partenaire, nouvelle_application_anais, nom_application_anais, nouvelle_gris_de_droit, application_gris_droit, flux_entrant_sortant, commentaire_flux, v2, conteneur_v2, transaction, batch_v2, web_service, code_organisation, justificaiton, idprojet, installation_de_lot_frequente, lancement_sessions_batch_frequentes, restauration_de_donnee_frequente, editique, besoin_specefique]
 
             client
                 .query(text5, values5)
@@ -177,10 +179,10 @@ exports.insertForm = function (data) {
                     console.log("données tech : ", res.rows[0])
 
                 })
-                console.log("acoss fb v2 details : ", v2_details)
+            console.log("acoss fb v2 details : ", v2_details)
 
             v2_details.forEach(el => {
-                console.log("el", el)
+               
                 let code_org = el.code_org
                 let add_server = el.add_serveur
                 let couloir_v2 = el.couloir
@@ -188,25 +190,25 @@ exports.insertForm = function (data) {
                 let connectee_archimed = el.archimed
                 let connectee_esb = el.esb
                 let dates_v2 = el.dates
-                
-                if(el.dates){
+
+                if (el.dates) {
                     let dates = el.dates
-                dates.forEach(elements => {
-                    let date_deb_v2 = elements.dateDebOrg
-                    let date_fin_v2 = elements.dateFinOrg
+                    dates.forEach(elements => {
+                        let date_deb_v2 = elements.dateDebOrg
+                        let date_fin_v2 = elements.dateFinOrg
 
-                    const text6 = 'INSERT INTO v2_details(web_service, code_org, add_server, couloir, justification,  connectee_archimed, connectee_esb, date_deb_v2, date_fin_v2, id_projet, dates) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *'
-                    const values6 = [web_service, code_org, add_server, couloir_v2, justification_v2, connectee_archimed, connectee_esb, date_deb_v2, date_fin_v2, idprojet,  dates_v2]
+                        const text6 = 'INSERT INTO v2_details(web_service, code_org, add_server, couloir, justification,  connectee_archimed, connectee_esb, date_deb_v2, date_fin_v2, id_projet, dates) VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *'
+                        const values6 = [web_service, code_org, add_server, couloir_v2, justification_v2, connectee_archimed, connectee_esb, date_deb_v2, date_fin_v2, idprojet, dates_v2]
 
 
-                    client
-                        .query(text6, values6)
-                        .then(resultats => {
-                            console.log("dv2 details : ", resultats.rows[0])
+                        client
+                            .query(text6, values6)
+                            .then(resultats => {
+                                console.log(" INSERTIONd v2 details : ", resultats.rows[0])
 
-                        })
-                })
-            }else{
+                            })
+                    })
+                } else {
                     const text6 = 'INSERT INTO v2_details(web_service, code_org, add_server, couloir, justification,  connectee_archimed, connectee_esb, id_projet) VALUES($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *'
                     const values6 = [web_service, code_org, add_server, couloir_v2, justification_v2, connectee_archimed, connectee_esb, idprojet]
 
@@ -214,12 +216,67 @@ exports.insertForm = function (data) {
                     client
                         .query(text6, values6)
                         .then(resultats => {
-                            console.log("dv2 details : ", resultats.rows[0])
+                            console.log("INSERTION  v2 details : ", resultats.rows[0])
 
                         })
-            }
+                }
             })
 
+            intervenants.forEach(el => {
+               
+                let nom_intervenant = el.nom_intervenant
+                let prenom_intervenant = el.prenom_intervenant
+                let login_intervenant = el.login_intervenant
+                let entreprise_intervenant = el.entreprise_intervenant
+                let fonction_intervenant = el.fonction
+                const text6 = 'INSERT INTO intervenant(nom_intervenant, prenom_intervenant, login_intervenant, entreprise_intervenant, fonction_intervenant, id_projet) VALUES($1, $2, $3, $4, $5, $6) RETURNING *'
+                const values6 = [nom_intervenant, prenom_intervenant, login_intervenant, entreprise_intervenant, fonction_intervenant, idprojet]
+
+                client
+                    .query(text6, values6)
+                    .then(resultats => {
+                        console.log("  INSERTION intervenant tech : ", resultats.rows[0])
+
+                    })
+            })
+
+            acces.forEach(el => {
+            
+                let choix = el.choix
+                let login = el.login
+                let autre_module_saturne = el.autre_module_saturne
+                let utilisateur = el.utilisateurs
+                let plateforme = el.plateforme
+                let bdd = el.data
+                const text7 = 'INSERT INTO acce(choix, login, autre_module_saturne, plateforme, bdd, utilisateur,id_projet) VALUES($1, $2, $3, $4, $5, $6, $7) RETURNING *'
+                const values7 = [choix, login, autre_module_saturne, plateforme, bdd, utilisateur, idprojet]
+
+                client
+                    .query(text7, values7)
+                    .then(resultats => {
+                        console.log(" INSERTION acce tech : ", resultats.rows[0])
+
+                    })
+            })
+            console.log("demo :  ", demo)
+            demo.forEach(el =>{
+                
+                let stabilite = el.stabilite;
+                let stabilite_demande = el.checkbox
+                let dates = el.date_demo
+                let date_deb_demo = el.date_demo[0]
+                let date_fin_demo = el.date_demo[1]
+                const text8 = 'INSERT INTO demo(dates, stabilite_demande, stabilite, id_projet, date_deb_demo, date_fin_demo) VALUES($1, $2, $3, $4, $5, $6) RETURNING *'
+                const values8 = [dates, stabilite_demande, stabilite, idprojet, date_deb_demo, date_fin_demo]
+
+
+                client
+                    .query(text8, values8)
+                    .then(resultats => {
+                        console.log("INSERTION  Demo  : ", resultats.rows[0])
+
+                    })
+            }) 
         })
 
 
@@ -235,7 +292,7 @@ exports.getListHistorique = function (callback) {
 
 exports.getListHistoriqueDetails = function (id, callback2) {
 
-    client.query("select distinct p.id_projet, p.date_mep, p.code_projet, p.libelle, p.cp_technique, p.email, p.jh_concept,p.jh_integration, p.jh_dev, p.jh_recette, p.jh_total, p.date_livraison, p.date_integration,p.echeance, p.cp_fonctionnel, p.besoin_bascule, p.besoin_validation, a.nom_app, a.domaine, a.id_app_param, a.date_deb, a.date_fin, a.commentaire_app, a.adherence, d.besoin_vm, d.combien_vm, d.logiciel, d.acces, d.test_nom_moa, d.test_nom_moe,d.test_nom_mue, d.test_responsable_sdit, d.besoin_demo_presentation, d.date_demo, d.portail_pora,d.portail_harmony_web, d.portail_harmony_rcp, d.portail_urssaf, d.accrochage_partenaire, d.nouvelle_application_anais, d.nom_applicaiton_anais, d.nouvelle_gris_droit, d.nom_application_gris, d.jeux_de_donnes, d.commentaire,d.v2, d.conteneur_v2, d.transaction, d.batch_v2, d.web_service, d.code_organisation, d.justification_code_org, d.web_service, d.instal_lot_freq, d.lancement_session_batch_freq, d.restauration_donnee_freq, d.editique,v.code_org, v.add_server, v.couloir, v.justification, v.connectee_archimed, v.connectee_esb, v.date_deb_v2, v.date_fin_v2 from projet_lot p left join application_form a on (p.id_projet = a.id_projet) left join donnes_techniques d on (p.id_projet= d.id_projet) left join v2_details v on (p.id_projet = v.id_projet) where p.id_projet = '" + id + "'")
+    client.query("select distinct p.id_projet, p.date_mep, p.code_projet, p.libelle, p.cp_technique, p.email, p.jh_concept,p.jh_integration, p.jh_dev, p.jh_recette, p.jh_total, p.date_livraison, p.date_integration,p.echeance, p.cp_fonctionnel, p.besoin_bascule, p.besoin_validation, a.nom_app, a.domaine, a.id_app_param, a.date_deb, a.date_fin, a.commentaire_app, a.adherence, d.besoin_vm, d.besoin_specefique, d.combien_vm, d.logiciel, d.acces, d.test_nom_moa, d.test_nom_moe,d.test_nom_mue, d.test_responsable_sdit, d.besoin_demo_presentation, d.date_demo, d.portail_pora,d.portail_harmony_web, d.portail_harmony_rcp, d.portail_urssaf, d.accrochage_partenaire, d.nouvelle_application_anais, d.nom_applicaiton_anais, d.nouvelle_gris_droit, d.nom_application_gris, d.jeux_de_donnes, d.commentaire, d.v2, d.conteneur_v2, d.transaction, d.batch_v2, d.web_service, d.code_organisation, d.justification_code_org, d.web_service, d.instal_lot_freq, d.lancement_session_batch_freq, d.restauration_donnee_freq, d.editique, v.code_org, v.add_server, v.couloir, v.justification, v.connectee_archimed, v.connectee_esb, v.dates, i.nom_intervenant, i.prenom_intervenant, i.entreprise_intervenant, i.login_intervenant, i.fonction_intervenant, ac.choix, ac.login, ac.autre_module_saturne, ac.bdd, ac.plateforme, ac.utilisateur, dm.stabilite, dm.stabilite_demande, dm.date_deb_demo, dm.date_fin_demo from projet_lot p left join application_form a on (p.id_projet = a.id_projet) left join donnes_techniques d on (p.id_projet= d.id_projet) left join v2_details v on (p.id_projet = v.id_projet) left join intervenant i on (p.id_projet = i.id_projet) left join acce ac on (p.id_projet = ac.id_projet) left join demo dm on (p.id_projet = dm.id_projet) where p.id_projet = '" + id + "'")
         .then(results => {
             console.log("details historique : ", results.rows)
             callback2(results.rows)
@@ -247,11 +304,16 @@ exports.getListHistoriqueDetails = function (id, callback2) {
 exports.deleteListHistoriqueDetails = function (id) {
 
     client.query("delete from projet_lot pl  where pl.id_projet = '" + id + "'")
-    .then(() => {
+        .then(() => {
             "delete from donnes_techniques d where d.id_projet = '" + id + "'"
         }).then(() => {
             client.query("delete from v2_details v  where v.id_projet = '" + id + "'")
-            console.log("suppression  v2_details ")
+        }).then(() => {
+            client.query("delete from intervenant i  where i.id_projet = '" + id + "'")
+        }).then(() => {
+            client.query("delete from acce ac  where ac.id_projet = '" + id + "'")
+        }).then(() => {
+            client.query("delete from demo dm  where dm.id_projet = '" + id + "'")
         }).then(() => {
             client.query("delete from projet p  where p.id_projet = '" + id + "'")
         }).then(() => {
@@ -334,10 +396,16 @@ exports.updateForm = function (data, id) {
             client.query("delete from application_form a   where a.id_projet = '" + id + "'")
         }).then(() => {
             client.query("delete from donnes_techniques d  where d.id_projet = '" + id + "'")
-            console.log("suppression   ")
+            
         }).then(() => {
             client.query("delete from v2_details v  where v.id_projet = '" + id + "'")
-            console.log("suppression   ")
+        
+        }).then(() => {
+            client.query("delete from intervenant i  where i.id_projet = '" + id + "'")
+        }).then(() => {
+            client.query("delete from acce ac  where ac.id_projet = '" + id + "'")
+        }).then(() => {
+            client.query("delete from demo dm  where dm.id_projet = '" + id + "'")
         }).then(() => {
             client.query("delete from projet p  where p.id_projet = '" + id + "'")
         }).then(() => {
@@ -534,5 +602,72 @@ exports.getListAdminDetails = function (id, callback13) {
 
 
 };
+
+exports.getCrud = function (opt ,callback14) {
+
+    console.log("le geeet ", opt)
+    client.query("select * from " +opt+ "")
+        .then(results => {
+           
+            callback14(results.rows)
+        })
+        .catch(e => console.error(e.stack))
+};
+
+ exports.deleteListPlateforme = function(data){
+    console.log("db delete ",data)
+     client.query("delete from " + data.selectedItem + " where name = '" + data.name + "'")
+    return JSON.stringify("200") 
+} ;
+
+exports.insertCrud = function (data) {
+    
+    const text10 = "INSERT INTO " + data.selectedItem + "(name) VALUES($1) RETURNING *"
+    const values10 = [data.name.name]
+    client
+        .query(text10, values10)
+        .then(resultats => {
+            console.log(" INSERTION into crud : ", data.selectedItem ,  resultats.rows[0])
+
+        })
+} ;
+exports.getListLogiciels = function (callback15){
+    client.query(`select name from logiciel`)
+        .then(results => {
+            callback15(results.rows)
+        })
+};
+
+exports.getListAcces = function (callback16) {
+    client.query(`select name from acces`)
+        .then(results => {
+            callback16(results.rows)
+        })
+};
+
+exports.getListFonction = function (callback17) {
+    client.query(`select name from fonction`)
+        .then(results => {
+            callback17(results.rows)
+        })
+};
+
+exports.getListBdd = function (callback18) {
+    client.query(`select name from bdd`)
+        .then(results => {
+            callback18(results.rows)
+        })
+};
+
+exports.getListV2 = function (callback19) {
+
+    client.query("select * from v2")
+        .then(results => {
+            callback19(results.rows)
+        })
+        .catch(e => console.error(e.stack))
+};
+
+
 
 

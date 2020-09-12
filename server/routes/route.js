@@ -54,4 +54,25 @@ module.exports = function (app) {
 
     app.route('/admin/details/:id')
         .get(restApi.list_admin_details);
+
+    app.route('/crud/:opt')
+        .get(restApi.list_crud);
+
+     app.route('/logiciel')
+        .get(restApi.getLogiciels); 
+
+    app.route('/acces')
+        .get(restApi.getAcces);
+
+    app.route('/fonction')
+        .get(restApi.getFonction);
+
+    app.route('/bdd')
+        .get(restApi.getBdd);
+        
+    app.route('/v2')
+        .get(restApi.getBdd);
+
+ 
+  
 };
