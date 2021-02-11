@@ -10,7 +10,7 @@
   "dependencies": {
     "@coreui/coreui": "^3.0.0",
     "@coreui/vue": "^3.0.7",
-    "apexcharts": "^3.18.1",
+    "apexcharts": "^3.24.0",
     "core-js": "^3.6.4",
     "fs": "0.0.1-security",
     "fusioncharts": "^3.15.1-sr.1",
